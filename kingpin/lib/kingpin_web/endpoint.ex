@@ -7,7 +7,7 @@ defmodule KingpinWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_kingpin_key",
-    signing_salt: "62pRq+HD"
+    signing_salt: "KLyleos4"
   ]
 
   socket "/socket", KingpinWeb.UserSocket,

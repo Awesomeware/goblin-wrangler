@@ -13,10 +13,10 @@ config :kingpin,
 # Configures the endpoint
 config :kingpin, KingpinWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "80belpITookJRfPjTw87Th9PtCYCuCiXbwGGj2f6+h2L84QFQt0nL7qGW0RwKfZH",
+  secret_key_base: "gKxjIkVFerj/VMTdjPZgpZTLJXvnaQAyyfb9rw+XQKHFQjucjtJ0KjCcLYlPspay",
   render_errors: [view: KingpinWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Kingpin.PubSub,
-  live_view: [signing_salt: "5vYvS0dU"]
+  live_view: [signing_salt: "al9KIXJX"]
 
 # Configures Elixir's Logger
 config :logger, :console,
