@@ -1,0 +1,8 @@
+git:latest
+github-branch-source:latest
+kubernetes:latest
+kubernetes-credentials-provider:latest
+github-organization-folder:latest
+github-oauth:latest
+authorize-project:latest
+pipeline-github:latest

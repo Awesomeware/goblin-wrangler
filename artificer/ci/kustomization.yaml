@@ -1,0 +1,19 @@
+commonLabels:
+  app: ci-server
+namespace: ci
+resources:
+  - service-accounts.yaml
+  - roles.yaml
+  - role-bindings.yaml
+  - pvcs.yaml
+  - services.yaml
+  - ingresses.yaml
+  - deployments.yaml
+configMapGenerator:
+- name: ci-server-plugins
+  files:
+  - config/plugins.txt
+- name: ci-server-customization
+  files:
+  - config/init.groovy.d/executors.groovy
+  - config/init.groovy.d/github.groovy

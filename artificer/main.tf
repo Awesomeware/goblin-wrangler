@@ -51,3 +51,68 @@ resource "digitalocean_kubernetes_cluster" "goblin-wrangler-cluster" {
         node_count = var.cluster_pool_count
     }
 }
+
+provider "kubernetes" {
+    version                = "~> 1.11"
+    load_config_file       = false
+    host                   = digitalocean_kubernetes_cluster.goblin-wrangler-cluster.endpoint
+    token                  = digitalocean_kubernetes_cluster.goblin-wrangler-cluster.kube_config[0].token
+    cluster_ca_certificate = base64decode(digitalocean_kubernetes_cluster.goblin-wrangler-cluster.kube_config[0].cluster_ca_certificate)
+}
+
+provider "kustomization" {
+    kubeconfig_raw = digitalocean_kubernetes_cluster.goblin-wrangler-cluster.kube_config[0].raw_config
+}
+
+resource "kubernetes_namespace" "goblin-wrangler-ingress" {
+    metadata {
+        labels = {
+            "app.kubernetes.io/name"    = "ingress-nginx",
+            "app.kubernetes.io/part-of" = "ingress-nginx"
+        }
+
+        name = "ingress-nginx"
+    }
+}
+
+resource "kubernetes_namespace" "goblin-wrangler-cert-manager" {
+    metadata {
+        name = "cert-manager"
+    }
+}
+
+resource "kubernetes_namespace" "goblin-wrangler-ci" {
+    metadata {
+        name = "ci"
+    }
+}
+
+data "kustomization" "goblin-wrangler-ingress" {
+    path = "ingress"
+}
+
+resource "kustomization_resource" "goblin-wrangler-ingress" {
+    for_each = data.kustomization.goblin-wrangler-ingress.ids
+
+    manifest = data.kustomization.goblin-wrangler-ingress.manifests[each.value]
+}
+
+data "kustomization" "goblin-wrangler-cert-manager" {
+    path = "cert-manager"
+}
+
+resource "kustomization_resource" "goblin-wrangler-cert-manager" {
+    for_each = data.kustomization.goblin-wrangler-cert-manager.ids
+
+    manifest = data.kustomization.goblin-wrangler-cert-manager.manifests[each.value]
+}
+
+data "kustomization" "goblin-wrangler-ci" {
+    path = "ci"
+}
+
+resource "kustomization_resource" "goblin-wrangler-ci" {
+    for_each = data.kustomization.goblin-wrangler-ci.ids
+
+    manifest = data.kustomization.goblin-wrangler-ci.manifests[each.value]
+}

@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ci-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ci-server
+  template:
+    metadata:
+      labels:
+        app: ci-server
+    spec:
+      containers:
+        - name: ci-server
+          image: jenkins/jenkins:2.234
+          ports:
+            - containerPort: 8080
+            - containerPort: 50000
+          volumeMounts:
+            - name: ci-server-home
+              mountPath: /var/jenkins_home
+            - name: ci-server-config
+              mountPath: /usr/share/jenkins/ref
+            - name: ci-server-plugins
+              mountPath: /tmp/jenkins-plugins
+            - name: ci-server-customization
+              mountPath: /tmp/jenkins-customization
+          command: ["/bin/bash", "-c"]
+          args: ["mkdir -p /usr/share/jenkins/ref/init.groovy.d; rm -f /usr/share/jenkins/ref/init.groovy.d/*; cp /tmp/jenkins-customization/* /usr/share/jenkins/ref/init.groovy.d/; cp /tmp/jenkins-plugins/plugins.txt /usr/share/jenkins/ref/; /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt; /sbin/tini -s -- /usr/local/bin/jenkins.sh"]
+          resources:
+            requests:
+              memory: 512m
+              cpu: 100m
+            limits:
+              memory: 1G
+              cpu: 1
+      securityContext:
+        fsGroup: 1000
+      serviceAccountName: ci-server
+      volumes:
+        - name: ci-server-home
+          persistentVolumeClaim:
+            claimName: ci-server-home
+        - name: ci-server-config
+          persistentVolumeClaim:
+            claimName: ci-server-config
+        - name: ci-server-plugins
+          configMap:
+            name: ci-server-plugins
+        - name: ci-server-customization
+          configMap:
+            name: ci-server-customization

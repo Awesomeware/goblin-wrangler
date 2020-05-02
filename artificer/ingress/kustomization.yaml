@@ -1,0 +1,12 @@
+commonLabels:
+  app: ingress
+namespace: ingress-nginx
+resources:
+ - cluster-role-bindings.yaml
+ - cluster-roles.yaml
+ - config-maps.yaml
+ - deployments.yaml
+ - role-bindings.yaml
+ - roles.yaml
+ - services.yaml
+ - service-accounts.yaml
