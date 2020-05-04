@@ -34,6 +34,15 @@ variable "cluster_pool_count" {
     default = 2
 }
 
+variable "github_username" {
+    type    = string
+    default = "Stephen001"
+}
+
+variable "github_access_token" {
+    type    = string
+}
+
 # Providers be here
 provider "digitalocean" {
     version = "~> 1.16"
@@ -84,6 +93,26 @@ resource "kubernetes_namespace" "goblin-wrangler-cert-manager" {
 resource "kubernetes_namespace" "goblin-wrangler-ci" {
     metadata {
         name = "ci"
+    }
+}
+
+resource "kubernetes_secret" "goblin-wrangler-github" {
+    metadata {
+        name = "github"
+        namespace = "ci"
+
+        labels = {
+            "jenkins.io/credentials-type" = "usernamePassword"
+        }
+
+        annotations = {
+            "jenkins.io/credentials-description" = "Used to scan GitHub for jobs"
+        }
+    }
+
+    data = {
+        username = var.github_username
+        password = var.github_access_token
     }
 }
 
