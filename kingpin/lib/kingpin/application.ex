@@ -13,6 +13,7 @@ defmodule Kingpin.Application do
       KingpinWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: Kingpin.PubSub},
+      KingpinWeb.Presence,
       # Start the Endpoint (http/https)
       KingpinWeb.Endpoint
       # Start a worker by calling: Kingpin.Worker.start_link(arg)
