@@ -43,6 +43,14 @@ variable "github_access_token" {
     type    = string
 }
 
+variable "github_oauth_id" {
+    type    = string
+}
+
+variable "github_oauth_secret" {
+    type    = string
+}
+
 # Providers be here
 provider "digitalocean" {
     version = "~> 1.16"
@@ -113,6 +121,18 @@ resource "kubernetes_secret" "goblin-wrangler-github" {
     data = {
         username = var.github_username
         password = var.github_access_token
+    }
+}
+
+resource "kubernetes_secret" "goblin-wrangler-github-oauth" {
+    metadata {
+        name = "github-oauth-client"
+        namespace = "ci"
+    }
+
+    data = {
+        id = var.github_oauth_id
+        secret = var.github_oauth_secret
     }
 }
 
