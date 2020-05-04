@@ -59,6 +59,7 @@ defmodule Kingpin.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
+      ci: ["deps.get --only prod", "compile", "cmd npm install --prefix assets", "cmd npm run deploy --prefix assets", "phx.digest", "release"],
       setup: ["deps.get", "ecto.setup", "cmd npm install --prefix assets"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
