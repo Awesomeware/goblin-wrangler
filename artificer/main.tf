@@ -69,6 +69,19 @@ resource "digitalocean_kubernetes_cluster" "goblin-wrangler-cluster" {
     }
 }
 
+resource "digitalocean_spaces_bucket" "goblin-wrangler-registry" {
+  name   = "goblin-wrangler-registry"
+  region = "fra1"
+}
+
+resource "digitalocean_spaces_bucket_object" "goblin-wrangler-registry-index" {
+  region       = digitalocean_spaces_bucket.goblin-wrangler-registry.region
+  bucket       = digitalocean_spaces_bucket.goblin-wrangler-registry.name
+  key          = "index.html"
+  content      = "<html><body><p>This page is empty.</p></body></html>" 
+  content_type = "text/html"
+}
+
 provider "kubernetes" {
     version                = "~> 1.11"
     load_config_file       = false
