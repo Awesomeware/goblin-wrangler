@@ -1,0 +1,11 @@
+_build
+deps
+cover
+doc
+.fetch
+assets/node_modules
+erl_crash.dump
+*.ez
+*.beam
+config/*.secret.exs
+priv/static
