@@ -33,6 +33,7 @@ defmodule Kingpin.Application do
     :ok
   end
 
+  # Migrate the databases to the version currently built in this application
   def migrate do
     load_app()
 
@@ -40,11 +41,6 @@ defmodule Kingpin.Application do
       :ok = ensure_repo_created(repo)
       {:ok, _, _} = Ecto.Migrator.with_repo(repo, &Ecto.Migrator.run(&1, :up, all: true))
     end
-  end
-
-  def rollback(repo, version) do
-    load_app()
-    {:ok, _, _} = Ecto.Migrator.with_repo(repo, &Ecto.Migrator.run(&1, :down, to: version))
   end
 
   defp ensure_repo_created(repo) do
