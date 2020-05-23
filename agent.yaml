@@ -23,6 +23,24 @@ spec:
       - name: dockercfg
         mountPath: /root/.docker
         readOnly: true
+  - name: kubectl
+    image: lachlanevenson/k8s-kubectl:latest
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    tty: true
+    command:
+      - cat
+  - name: busybox
+    image: busybox:latest
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    tty: true
+    command:
+      - cat
   volumes:
     - name: dockersocket
       hostPath:
