@@ -117,6 +117,12 @@ resource "kubernetes_namespace" "goblin-wrangler-ci" {
     }
 }
 
+resource "kubernetes_namespace" "goblin-wrangler-registry" {
+    metadata {
+        name = "registry"
+    }
+}
+
 resource "kubernetes_secret" "goblin-wrangler-github" {
     metadata {
         name = "github"
@@ -177,4 +183,14 @@ resource "kustomization_resource" "goblin-wrangler-ci" {
     for_each = data.kustomization.goblin-wrangler-ci.ids
 
     manifest = data.kustomization.goblin-wrangler-ci.manifests[each.value]
+}
+
+data "kustomization" "goblin-wrangler-registry" {
+    path = "registry"
+}
+
+resource "kustomization_resource" "goblin-wrangler-registry" {
+    for_each = data.kustomization.goblin-wrangler-registry.ids
+
+    manifest = data.kustomization.goblin-wrangler-registry.manifests[each.value]
 }
