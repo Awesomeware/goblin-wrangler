@@ -19,3 +19,4 @@ configMapGenerator:
   - config/init.groovy.d/auth.groovy
   - config/init.groovy.d/executors.groovy
   - config/init.groovy.d/github.groovy
+  - config/init.groovy.d/kubernetes.groovy

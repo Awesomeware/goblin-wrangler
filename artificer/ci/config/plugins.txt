@@ -6,3 +6,4 @@ github-organization-folder:latest
 github-oauth:latest
 authorize-project:latest
 pipeline-github:latest
+pipeline-model-definition:latest
