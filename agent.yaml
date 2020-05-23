@@ -12,3 +12,24 @@ spec:
       limits:
         memory: "128Mi"
         cpu: "500m"
+    tty: true
+    command:
+      - cat
+    securityContext:
+      privileged: true
+    volumeMounts:
+      - name: dockersocket
+        mountPath: /var/run/docker.sock
+      - name: dockercfg
+        mountPath: /root/.docker
+        readOnly: true
+  volumes:
+    - name: dockersocket
+      hostPath:
+        path: /var/run/docker.sock
+    - name: dockercfg
+      secret:
+        secretName: internal-registry
+        items:
+          - key: .dockerconfigjson
+            path: config.json
