@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
   - name: docker
-    image: docker:stable
+    image: docker:19.03.8
     resources:
       limits:
         memory: "128Mi"
