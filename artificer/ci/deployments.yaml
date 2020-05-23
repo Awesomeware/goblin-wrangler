@@ -4,6 +4,9 @@ metadata:
   name: ci-server
 spec:
   replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: ci-server
@@ -14,7 +17,7 @@ spec:
     spec:
       containers:
         - name: ci-server
-          image: jenkins/jenkins:2.234
+          image: jenkins/jenkins:2.237
           ports:
             - containerPort: 8080
             - containerPort: 50000
@@ -27,15 +30,26 @@ spec:
               mountPath: /tmp/jenkins-plugins
             - name: ci-server-customization
               mountPath: /tmp/jenkins-customization
+          env:
+            - name: GITHUB_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: github-oauth-client
+                  key: id
+            - name: GITHUB_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: github-oauth-client
+                  key: secret
           command: ["/bin/bash", "-c"]
-          args: ["mkdir -p /usr/share/jenkins/ref/init.groovy.d; rm -f /usr/share/jenkins/ref/init.groovy.d/*; cp /tmp/jenkins-customization/* /usr/share/jenkins/ref/init.groovy.d/; cp /tmp/jenkins-plugins/plugins.txt /usr/share/jenkins/ref/; /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt; /sbin/tini -s -- /usr/local/bin/jenkins.sh"]
+          args: ["rm -rf /usr/share/jenkins/ref/init.groovy.d /var/jenkins_home/init.groovy.d; mkdir -p /usr/share/jenkins/ref/init.groovy.d; cp /tmp/jenkins-customization/* /usr/share/jenkins/ref/init.groovy.d/; cp /tmp/jenkins-plugins/plugins.txt /usr/share/jenkins/ref/; /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt; /sbin/tini -s -- /usr/local/bin/jenkins.sh"]
           resources:
             requests:
               memory: 512m
               cpu: 100m
             limits:
               memory: 1G
-              cpu: 1
+              cpu: "1"
       securityContext:
         fsGroup: 1000
       serviceAccountName: ci-server

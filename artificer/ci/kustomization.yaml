@@ -15,5 +15,7 @@ configMapGenerator:
   - config/plugins.txt
 - name: ci-server-customization
   files:
+  - config/init.groovy.d/_url.groovy
+  - config/init.groovy.d/auth.groovy
   - config/init.groovy.d/executors.groovy
   - config/init.groovy.d/github.groovy

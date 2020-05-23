@@ -34,6 +34,23 @@ variable "cluster_pool_count" {
     default = 2
 }
 
+variable "github_username" {
+    type    = string
+    default = "Stephen001"
+}
+
+variable "github_access_token" {
+    type    = string
+}
+
+variable "github_oauth_id" {
+    type    = string
+}
+
+variable "github_oauth_secret" {
+    type    = string
+}
+
 # Providers be here
 provider "digitalocean" {
     version = "~> 1.16"
@@ -50,6 +67,19 @@ resource "digitalocean_kubernetes_cluster" "goblin-wrangler-cluster" {
         size       = var.cluster_pool_spec
         node_count = var.cluster_pool_count
     }
+}
+
+resource "digitalocean_spaces_bucket" "goblin-wrangler-registry" {
+  name   = "goblin-wrangler-registry"
+  region = "fra1"
+}
+
+resource "digitalocean_spaces_bucket_object" "goblin-wrangler-registry-index" {
+  region       = digitalocean_spaces_bucket.goblin-wrangler-registry.region
+  bucket       = digitalocean_spaces_bucket.goblin-wrangler-registry.name
+  key          = "index.html"
+  content      = "<html><body><p>This page is empty.</p></body></html>" 
+  content_type = "text/html"
 }
 
 provider "kubernetes" {
@@ -87,6 +117,44 @@ resource "kubernetes_namespace" "goblin-wrangler-ci" {
     }
 }
 
+resource "kubernetes_namespace" "goblin-wrangler-registry" {
+    metadata {
+        name = "registry"
+    }
+}
+
+resource "kubernetes_secret" "goblin-wrangler-github" {
+    metadata {
+        name = "github"
+        namespace = "ci"
+
+        labels = {
+            "jenkins.io/credentials-type" = "usernamePassword"
+        }
+
+        annotations = {
+            "jenkins.io/credentials-description" = "Used to scan GitHub for jobs"
+        }
+    }
+
+    data = {
+        username = var.github_username
+        password = var.github_access_token
+    }
+}
+
+resource "kubernetes_secret" "goblin-wrangler-github-oauth" {
+    metadata {
+        name = "github-oauth-client"
+        namespace = "ci"
+    }
+
+    data = {
+        id = var.github_oauth_id
+        secret = var.github_oauth_secret
+    }
+}
+
 data "kustomization" "goblin-wrangler-ingress" {
     path = "ingress"
 }
@@ -115,4 +183,14 @@ resource "kustomization_resource" "goblin-wrangler-ci" {
     for_each = data.kustomization.goblin-wrangler-ci.ids
 
     manifest = data.kustomization.goblin-wrangler-ci.manifests[each.value]
+}
+
+data "kustomization" "goblin-wrangler-registry" {
+    path = "registry"
+}
+
+resource "kustomization_resource" "goblin-wrangler-registry" {
+    for_each = data.kustomization.goblin-wrangler-registry.ids
+
+    manifest = data.kustomization.goblin-wrangler-registry.manifests[each.value]
 }

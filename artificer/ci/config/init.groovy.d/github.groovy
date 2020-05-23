@@ -5,6 +5,7 @@ import com.cloudbees.plugins.credentials.domains.*
 import com.cloudbees.plugins.credentials.impl.*
 import jenkins.branch.OrganizationFolder
 import org.jenkinsci.plugins.github_branch_source.*
+import org.jenkinsci.plugins.*
 
 def folder = Jenkins.instance.items.isEmpty() ? Jenkins.instance.createProject(OrganizationFolder, 'Awesomeware') : Jenkins.instance.items[0]
 def navigator = new GitHubSCMNavigator('Awesomeware')

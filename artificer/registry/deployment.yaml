@@ -1,0 +1,95 @@
+---
+# Source: docker-registry/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-registry
+  labels:
+    app: docker-registry
+    chart: docker-registry-1.9.3
+    release: master
+    heritage: Helm
+spec:
+  selector:
+    matchLabels:
+      app: docker-registry
+      release: master
+  replicas: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: docker-registry
+        release: master
+      annotations:
+        checksum/config: 708809470365310c0d0849d6b83a561accde3ef42a6883b368a613159d9f0fe5
+    spec:
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+      containers:
+        - name: docker-registry
+          image: "stephen001/registry:latest"
+          imagePullPolicy: IfNotPresent
+          command:
+          - /bin/registry
+          - serve
+          - /etc/docker/registry/config.yml
+          ports:
+            - containerPort: 5000
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+          resources:
+            {}
+          env:
+            - name: REGISTRY_AUTH
+              value: "htpasswd"
+            - name: REGISTRY_AUTH_HTPASSWD_REALM
+              value: "Registry Realm"
+            - name: REGISTRY_AUTH_HTPASSWD_PATH
+              value: "/auth/htpasswd"
+            - name: REGISTRY_HTTP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: docker-registry-secret
+                  key: haSharedSecret
+            - name: REGISTRY_STORAGE_S3_ACCESSKEY
+              valueFrom:
+                secretKeyRef:
+                  name: docker-registry-secret
+                  key: s3AccessKey
+            - name: REGISTRY_STORAGE_S3_SECRETKEY
+              valueFrom:
+                secretKeyRef:
+                  name: docker-registry-secret
+                  key: s3SecretKey
+            - name: REGISTRY_STORAGE_S3_REGION
+              value: fra1
+            - name: REGISTRY_STORAGE_S3_REGIONENDPOINT
+              value: fra1.digitaloceanspaces.com
+            - name: REGISTRY_STORAGE_S3_BUCKET
+              value: goblin-wrangler-registry
+            - name: REGISTRY_STORAGE_S3_SECURE
+              value: "true"
+          volumeMounts:
+            - name: auth
+              mountPath: /auth
+              readOnly: true
+            - name: "docker-registry-config"
+              mountPath: "/etc/docker/registry"
+      volumes:
+        - name: auth
+          secret:
+            secretName: docker-registry-secret
+            items:
+            - key: htpasswd
+              path: htpasswd
+        - name: docker-registry-config
+          configMap:
+            name: docker-registry-config
