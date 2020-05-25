@@ -5,6 +5,7 @@ metadata:
   labels:
     name: docker
 spec:
+  serviceAccountName: ci-worker
   containers:
   - name: docker
     image: docker:19.03.8
