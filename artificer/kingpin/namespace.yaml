@@ -10,4 +10,5 @@ data:
 kind: Secret
 metadata:
   name: internal-registry
+  namespace: KINGPIN_NAMESPACE
 type: kubernetes.io/dockerconfigjson

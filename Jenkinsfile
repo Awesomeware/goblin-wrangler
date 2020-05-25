@@ -23,6 +23,7 @@ pipeline {
                     sh "sed -i s#KINGPIN_IMAGE#registry.goblinwrangler.com/${env.BRANCH_NAME.toLowerCase()}/kingpin:latest#g artificer/kingpin/kingpin.yaml"
                 }
                 container('kubectl') {
+                    sh "kubectl apply -f artificer/kingpin/namespace.yaml"
                     sh "kubectl apply -k artificer/kingpin/ -n ${env.BRANCH_NAME.toLowerCase()}"
                 }
             }
