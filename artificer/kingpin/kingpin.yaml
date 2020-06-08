@@ -67,10 +67,3 @@ spec:
           envFrom:
             - secretRef:
                 name: kingpin
-          resources:
-            requests:
-              memory: 256m
-              cpu: 500m
-            limits:
-              memory: 256m
-              cpu: 500m
