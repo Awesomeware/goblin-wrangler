@@ -69,8 +69,8 @@ spec:
                 name: kingpin
           resources:
             requests:
-              memory: 128m
-              cpu: 100m
+              memory: 256m
+              cpu: 500m
             limits:
               memory: 256m
               cpu: 500m
