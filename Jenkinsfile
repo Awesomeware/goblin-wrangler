@@ -27,6 +27,16 @@ pipeline {
                     sh "kubectl apply -k artificer/kingpin/ -n ${env.BRANCH_NAME.toLowerCase()}"
                 }
             }
+
+            post {
+                success {
+                    script {
+                        if (env.CHANGE_ID) {
+                            pullRequest.createStatus(status: 'success', context: 'continuous-integration/jenkins/deployment', description: 'Pull request is deployed', targetUrl: "https://${env.BRANCH_NAME.toLowerCase()}.goblinwrangler.com")
+                        }
+                    }
+                }
+            }
         }
     }
 }
