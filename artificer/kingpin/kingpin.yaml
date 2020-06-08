@@ -1,0 +1,76 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: kingpin
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+    - hosts:
+        - KINGPIN_HOST
+      secretName: kingpin-tls
+  rules:
+    - host: KINGPIN_HOST
+      http:
+        paths:
+          - backend:
+              serviceName: kingpin
+              servicePort: 4000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kingpin
+spec:
+  selector:
+    app: kingpin
+  ports:
+   - name: app
+     protocol: TCP
+     port: 4000
+     targetPort: 4000
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kingpin
+stringData:
+  DATABASE_URL: "ecto://postgres:postgres@postgres:5432/kingpin_dev"
+  SECRET_KEY_BASE: wAS0ruVI5SnxcQcx6R9e0vWIhAAZXN8f3I5jhvqzL9odQuwyyggDD4qpCizhWw4K
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kingpin
+spec:
+  replicas: 2
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: kingpin
+  template:
+    metadata:
+      labels:
+        app: kingpin
+    spec:
+      containers:
+        - name: kingpin
+          image: KINGPIN_IMAGE
+          ports:
+            - containerPort: 4000
+          envFrom:
+            - secretRef:
+                name: kingpin
+          resources:
+            requests:
+              memory: 128m
+              cpu: 100m
+            limits:
+              memory: 256m
+              cpu: 500m

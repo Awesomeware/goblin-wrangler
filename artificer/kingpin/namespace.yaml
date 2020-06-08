@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: KINGPIN_NAMESPACE
+
+---
+apiVersion: v1
+data:
+  .dockerconfigjson: eyJhdXRocyI6eyJyZWdpc3RyeS5nb2JsaW53cmFuZ2xlci5jb20iOnsidXNlcm5hbWUiOiJjaSIsInBhc3N3b3JkIjoiWzRYRUVNKUI1UGY1STE4ZSM1QzMrSzQrIiwiYXV0aCI6IlkyazZXelJZUlVWTktVSTFVR1kxU1RFNFpTTTFRek1yU3pRciJ9fX0=
+kind: Secret
+metadata:
+  name: internal-registry
+  namespace: KINGPIN_NAMESPACE
+type: kubernetes.io/dockerconfigjson
