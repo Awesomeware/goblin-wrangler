@@ -16,7 +16,7 @@ variable "cluster_region" {
 
 variable "cluster_version" {
     type    = string
-    default = "1.16.6-do.2"
+    default = "1.16.8-do.0"
 }
 
 variable "cluster_pool_name" {

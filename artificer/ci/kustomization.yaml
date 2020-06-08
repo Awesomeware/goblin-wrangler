@@ -5,6 +5,7 @@ resources:
   - service-accounts.yaml
   - roles.yaml
   - role-bindings.yaml
+  - cluster-roles.yaml
   - cluster-role-bindings.yaml
   - pvcs.yaml
   - services.yaml
