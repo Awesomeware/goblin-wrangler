@@ -67,3 +67,5 @@ spec:
           envFrom:
             - secretRef:
                 name: kingpin
+      imagePullSecrets:
+        - name: internal-registry
