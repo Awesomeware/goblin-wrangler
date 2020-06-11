@@ -156,7 +156,7 @@ resource "kubernetes_secret" "goblin-wrangler-github-oauth" {
 }
 
 data "kustomization" "goblin-wrangler-ingress" {
-    path = "ingress"
+    path = "${path.module}/ingress"
 }
 
 resource "kustomization_resource" "goblin-wrangler-ingress" {
@@ -166,7 +166,7 @@ resource "kustomization_resource" "goblin-wrangler-ingress" {
 }
 
 data "kustomization" "goblin-wrangler-cert-manager" {
-    path = "cert-manager"
+    path = "${path.module}/cert-manager"
 }
 
 resource "kustomization_resource" "goblin-wrangler-cert-manager" {
@@ -176,7 +176,7 @@ resource "kustomization_resource" "goblin-wrangler-cert-manager" {
 }
 
 data "kustomization" "goblin-wrangler-ci" {
-    path = "ci"
+    path = "${path.module}/ci"
 }
 
 resource "kustomization_resource" "goblin-wrangler-ci" {
@@ -186,7 +186,7 @@ resource "kustomization_resource" "goblin-wrangler-ci" {
 }
 
 data "kustomization" "goblin-wrangler-registry" {
-    path = "registry"
+    path = "${path.module}/registry"
 }
 
 resource "kustomization_resource" "goblin-wrangler-registry" {
