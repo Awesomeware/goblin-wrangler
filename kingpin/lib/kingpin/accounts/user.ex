@@ -1,4 +1,6 @@
 defmodule Kingpin.Accounts.User do
+  @moduledoc " Users are real people who use our system "
+
   use Ecto.Schema
   import Ecto.Changeset
 
