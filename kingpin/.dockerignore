@@ -7,3 +7,8 @@ __pycache__/
 
 # Docker
 Dockerfile
+
+# Jenkins
+junit.xml
+coverage.xml
+.coverage

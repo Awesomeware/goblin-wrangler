@@ -7,7 +7,24 @@ pipeline {
     }
 
     stages {
-        stage('Build and Push') {
+        stage('Python') {
+            steps {
+                container('python') {
+                    sh 'curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python'
+                    sh 'cd kingpin && $HOME/.poetry/bin/poetry install'
+                    sh 'cd kingpin && $HOME/.poetry/bin/poetry run pytest --junitxml=junit.xml --cov-report xml:coverage.xml --cov=kingpin'
+                }
+            }
+
+            post {
+                always {
+                    junit testResults: 'kingpin/junit.xml'
+                    cobertura coberturaReportFile: 'kingpin/coverage.xml'
+                }
+            }
+        }
+
+        stage('Docker') {
             steps {
                 container('docker') {
                     sh "docker build -t registry.goblinwrangler.com/${env.BRANCH_NAME.toLowerCase()}/kingpin:latest kingpin/ && docker push registry.goblinwrangler.com/${env.BRANCH_NAME.toLowerCase()}/kingpin:latest"

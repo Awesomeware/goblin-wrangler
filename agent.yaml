@@ -33,6 +33,15 @@ spec:
     tty: true
     command:
       - cat
+  - name: python
+    image: python:3.7
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    tty: true
+    command:
+      - cat
   - name: busybox
     image: busybox:latest
     resources:
