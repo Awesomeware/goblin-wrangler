@@ -1,13 +1,11 @@
-/_build
-/cover
-/deps
-/doc
-/.fetch
-erl_crash.dump
-*.ez
-*.beam
-/config/*.secret.exs
-.elixir_ls/
+# Poetry
+.venv/
+dist/
+__pycache__/
+.pytest_cache/
+*.egg-info/
+
+# Terraform
 .terraform/
 *.tfstate*
 terraform.tfvars
