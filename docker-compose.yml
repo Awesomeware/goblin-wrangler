@@ -4,22 +4,24 @@ services:
   postgres:
     image: postgres
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_USER: ${POSTGRES_USER:-kingpin}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       PGDATA: ./data/postgres
     volumes:
       - postgres:$PWD/data/postgres
     ports:
-      - "15432:5432"
+      - 15432:5432
     restart: unless-stopped
   kingpin:
     build: kingpin/
     image: kingpin:latest
     environment:
-      DATABASE_URL: "ecto://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/kingpin_dev"
-      SECRET_KEY_BASE: wAS0ruVI5SnxcQcx6R9e0vWIhAAZXN8f3I5jhvqzL9odQuwyyggDD4qpCizhWw4K
+      POSTGRES_URL: postgres:5432
+      POSTGRES_USER: ${POSTGRES_USER:-kingpin}
+      POSTGRES_PW: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: kingpin
     ports:
-      - "4000:4000"
+      - 4000:4000
     restart: unless-stopped
 
 volumes:
