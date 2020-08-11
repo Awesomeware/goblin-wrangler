@@ -1,18 +1,11 @@
-FROM alpine:3.11 as build
+FROM python:3.7
 
-RUN apk add --no-cache elixir npm
+RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
 
-RUN mix local.hex --force && mix local.rebar --force
+WORKDIR /app
+COPY . /app
+RUN $HOME/.poetry/bin/poetry install --no-dev -n --no-ansi
 
-COPY . .
-
-RUN MIX_ENV=prod mix ci
-
-FROM alpine:3.11
-
-RUN apk add --no-cache ncurses-libs
-
-COPY --from=build _build/prod/rel/kingpin /app
-
-ENTRYPOINT ["/app/bin/kingpin"]
-CMD ["start"]
+EXPOSE 4000
+ENTRYPOINT ["/root/.poetry/bin/poetry"]
+CMD ["run", "gunicorn", "--bind", "0.0.0.0:4000", "kingpin.wsgi"]

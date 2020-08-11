@@ -17,8 +17,9 @@ kind: Secret
 metadata:
   name: postgres-login
 stringData:
-  POSTGRES_USER: postgres
+  POSTGRES_USER: kingpin
   POSTGRES_PASSWORD: postgres
+  POSTGRES_DB: kingpin
 
 ---
 apiVersion: apps/v1

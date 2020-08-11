@@ -1,12 +1,14 @@
-_build
-deps
-cover
-doc
-.fetch
-assets/node_modules
-erl_crash.dump
-*.ez
-*.beam
-config/*.secret.exs
-priv/static
+# Poetry
+.venv/
+dist/
+__pycache__/
+.pytest_cache/
+*.egg-info/
+
+# Docker
 Dockerfile
+
+# Jenkins
+junit.xml
+coverage.xml
+.coverage
