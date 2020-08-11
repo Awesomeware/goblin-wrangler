@@ -61,5 +61,13 @@ spec:
           envFrom:
             - secretRef:
                 name: postgres-login
+          livenessProbe:
+            httpGet:
+              path: /health/check
+              port: 4000
+          readinessProbe:
+            httpGet:
+              path: /health/check
+              port: 4000
       imagePullSecrets:
         - name: internal-registry
