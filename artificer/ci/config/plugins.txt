@@ -11,3 +11,5 @@ cloudbees-folder:latest
 script-security:latest
 junit:latest
 matrix-project:latest
+cobertura:latest
+blueocean:latest
