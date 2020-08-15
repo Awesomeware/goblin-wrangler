@@ -12,12 +12,15 @@ pipeline {
                 container('python') {
                     sh 'curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python'
                     sh 'cd kingpin && $HOME/.poetry/bin/poetry install'
-                    sh 'cd kingpin && $HOME/.poetry/bin/poetry run pytest --junitxml=junit.xml --cov-report xml:coverage.xml --cov=kingpin'
+                    sh 'cd kingpin && $HOME/.poetry/bin/poetry run pylint --output-format=parseable kingpin > pylint.report || true'
+                    sh 'cd kingpin && $HOME/.poetry/bin/poetry run pycodestyle kingpin > pep8.report || true'
+                    sh 'cd kingpin && $HOME/.poetry/bin/poetry run pytest --junitxml=junit.xml --cov-report xml:coverage.xml --cov=kingpin'  
                 }
             }
 
             post {
                 always {
+                    recordIssues tools: [pyLint(pattern: "kingpin/pylint.report"), pep8(pattern: "kingpin/pep8.report")], healthy: 1
                     junit testResults: 'kingpin/junit.xml'
                     cobertura coberturaReportFile: 'kingpin/coverage.xml'
                 }

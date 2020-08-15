@@ -16,6 +16,8 @@ authlib = "^0.14.3"
 [tool.poetry.dev-dependencies]
 pytest = "^6.0.1"
 pytest-cov = "^2.10.0"
+pylint = "^2.5.3"
+pycodestyle = "^2.6.0"
 
 [build-system]
 requires = ["poetry>=0.12"]
