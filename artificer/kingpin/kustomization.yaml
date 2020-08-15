@@ -1,3 +1,4 @@
 resources:
   - postgres.yaml
   - kingpin.yaml
+  - secret.yaml
