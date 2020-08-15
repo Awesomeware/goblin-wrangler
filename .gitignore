@@ -14,3 +14,5 @@ terraform.tfvars
 junit.xml
 coverage.xml
 .coverage
+pylint.report
+pep8.report
