@@ -13,3 +13,4 @@ junit:latest
 matrix-project:latest
 cobertura:latest
 blueocean:latest
+warnings-ng:latest
