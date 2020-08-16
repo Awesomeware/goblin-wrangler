@@ -18,8 +18,10 @@ services:
     environment:
       POSTGRES_URL: postgres:5432
       POSTGRES_USER: ${POSTGRES_USER:-kingpin}
-      POSTGRES_PW: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       POSTGRES_DB: kingpin
+      GOOGLE_CLIENT_ID: 743280885157-sgkmtnt8da5f47bl9h519aomd04gck0r.apps.googleusercontent.com
+      GOOGLE_CLIENT_SECRET: 51WsETpbbL_Uc6y6klJHFal7
     ports:
       - 4000:4000
     restart: unless-stopped
