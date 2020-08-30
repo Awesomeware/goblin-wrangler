@@ -31,6 +31,7 @@ from kingpin.db.context import db  # noqa
 from kingpin.db.models import User  # noqa
 from kingpin.db import functions  # noqa
 from kingpin.healthcheck import healthcheck_api  # noqa
+from kingpin.user import user_api  # noqa
 # pylint: enable=wrong-import-position
 
 migrate = Migrate(application, db)
@@ -71,6 +72,7 @@ auth_api = create_flask_blueprint(backends, oauth, handle_authorize)
 
 application.register_blueprint(auth_api, url_prefix='')
 application.register_blueprint(healthcheck_api, url_prefix='/health')
+application.register_blueprint(user_api, url_prefix='/user')
 
 if __name__ == "__main__":
     application.run(host='0.0.0.0', port=4000)

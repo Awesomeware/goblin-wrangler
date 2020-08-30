@@ -1,21 +1,21 @@
 """ The core model objects of our DB """
 
+import uuid
 from flask_login import UserMixin
 from sqlalchemy.dialects.postgresql.base import UUID
 from sqlalchemy import Table, Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 from kingpin.db.context import db
-import uuid
 
 
 party_users = Table(
-                    'party_users',
-                    db.metadata,
-                    Column('user_id', UUID(as_uuid=True),
-                           ForeignKey('user.id', ondelete="CASCADE")),
-                    Column('party_id', UUID(as_uuid=True),
-                           ForeignKey('party.id', ondelete="CASCADE"))
-                   )
+    'party_users',
+    db.metadata,
+    Column('user_id', UUID(as_uuid=True),
+           ForeignKey('user.id', ondelete="CASCADE")),
+    Column('party_id', UUID(as_uuid=True),
+           ForeignKey('party.id', ondelete="CASCADE"))
+    )
 
 
 class User(UserMixin, db.Model):
