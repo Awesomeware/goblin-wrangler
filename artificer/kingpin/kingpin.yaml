@@ -14,9 +14,13 @@ spec:
     - host: KINGPIN_HOST
       http:
         paths:
-          - backend:
-              serviceName: kingpin
-              servicePort: 4000
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kingpin
+                port:
+                  name: app
 
 ---
 apiVersion: v1
