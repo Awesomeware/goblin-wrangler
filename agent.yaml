@@ -28,8 +28,8 @@ spec:
     image: python:3.8
     resources:
       limits:
-        memory: "128Mi"
-        cpu: "500m"
+        memory: "512Mi"
+        cpu: "1"
     tty: true
     command:
       - cat
