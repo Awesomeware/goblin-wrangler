@@ -30,7 +30,7 @@ pipeline {
         stage('Docker') {
             steps {
                 container('docker') {
-                    sh "docker build -t registry.goblinwrangler.com/${env.BRANCH_NAME.toLowerCase()}/kingpin:latest kingpin/ && docker push registry.goblinwrangler.com/${env.BRANCH_NAME.toLowerCase()}/kingpin:latest"
+                    sh "docker build -t registry.digitalocean.com/goblin-wrangler/${env.BRANCH_NAME.toLowerCase()}/kingpin:latest kingpin/ && docker push registry.digitalocean.com/goblin-wrangler/${env.BRANCH_NAME.toLowerCase()}/kingpin:latest"
                 }
             }
         }
@@ -40,7 +40,7 @@ pipeline {
                 container('busybox') {
                     sh "sed -i s#KINGPIN_NAMESPACE#${env.BRANCH_NAME.toLowerCase()}#g artificer/kingpin/namespace.yaml"
                     sh "sed -i s#KINGPIN_HOST#${env.BRANCH_NAME == 'main' ? '' : env.BRANCH_NAME.toLowerCase() + '.'}goblinwrangler.com#g artificer/kingpin/kingpin.yaml"
-                    sh "sed -i s#KINGPIN_IMAGE#registry.goblinwrangler.com/${env.BRANCH_NAME.toLowerCase()}/kingpin:latest#g artificer/kingpin/kingpin.yaml"
+                    sh "sed -i s#KINGPIN_IMAGE#registry.digitalocean.com/goblin-wrangler/${env.BRANCH_NAME.toLowerCase()}/kingpin:latest#g artificer/kingpin/kingpin.yaml"
                 }
                 container('kubectl') {
                     sh "kubectl apply -f artificer/kingpin/namespace.yaml"

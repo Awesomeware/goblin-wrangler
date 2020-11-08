@@ -74,4 +74,4 @@ spec:
               path: /health/check
               port: 4000
       imagePullSecrets:
-        - name: internal-registry
+        - name: goblin-wrangler

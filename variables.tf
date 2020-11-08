@@ -16,7 +16,7 @@ variable "cluster_region" {
 
 variable "cluster_version" {
     type    = string
-    default = "1.17.9-do.0"
+    default = "1.19.3-do.2"
 }
 
 variable "cluster_pool_name" {
@@ -31,7 +31,7 @@ variable "cluster_pool_spec" {
 
 variable "cluster_pool_count" {
     type    = number
-    default = 2
+    default = 1
 }
 
 variable "github_username" {

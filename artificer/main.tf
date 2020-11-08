@@ -16,7 +16,7 @@ variable "cluster_region" {
 
 variable "cluster_version" {
     type    = string
-    default = "1.17.9-do.0"
+    default = "1.19.3-do.2"
 }
 
 variable "cluster_pool_name" {
@@ -26,12 +26,12 @@ variable "cluster_pool_name" {
 
 variable "cluster_pool_spec" {
     type    = string
-    default = "s-6vcpu-16gb"
+    default = "s-8vcpu-16gb"
 }
 
 variable "cluster_pool_count" {
     type    = number
-    default = 2
+    default = 1
 }
 
 variable "github_username" {
@@ -53,7 +53,7 @@ variable "github_oauth_secret" {
 
 # Providers be here
 provider "digitalocean" {
-    version = "~> 1.16"
+    version = "~> 2.1"
 }
 
 # Resources be here
@@ -69,21 +69,18 @@ resource "digitalocean_kubernetes_cluster" "goblin-wrangler-cluster" {
     }
 }
 
-resource "digitalocean_spaces_bucket" "goblin-wrangler-registry" {
-  name   = "goblin-wrangler-registry"
-  region = "fra1"
+resource "digitalocean_container_registry" "goblin-wrangler" {
+    name = "goblin-wrangler"
+    subscription_tier_slug = "professional"
 }
 
-resource "digitalocean_spaces_bucket_object" "goblin-wrangler-registry-index" {
-  region       = digitalocean_spaces_bucket.goblin-wrangler-registry.region
-  bucket       = digitalocean_spaces_bucket.goblin-wrangler-registry.name
-  key          = "index.html"
-  content      = "<html><body><p>This page is empty.</p></body></html>" 
-  content_type = "text/html"
+resource "digitalocean_container_registry_docker_credentials" "goblin-wrangler" {
+    registry_name = digitalocean_container_registry.goblin-wrangler.name
+    write = true
 }
 
 provider "kubernetes" {
-    version                = "~> 1.11"
+    version                = "~> 1.13"
     load_config_file       = false
     host                   = digitalocean_kubernetes_cluster.goblin-wrangler-cluster.endpoint
     token                  = digitalocean_kubernetes_cluster.goblin-wrangler-cluster.kube_config[0].token
@@ -117,10 +114,17 @@ resource "kubernetes_namespace" "goblin-wrangler-ci" {
     }
 }
 
-resource "kubernetes_namespace" "goblin-wrangler-registry" {
+resource "kubernetes_secret" "goblin-wrangler-registry" {
     metadata {
-        name = "registry"
+        name = "internal-registry"
+        namespace = "ci"
     }
+
+    data = {
+        ".dockerconfigjson" = digitalocean_container_registry_docker_credentials.goblin-wrangler.docker_credentials
+    }
+
+    type = "kubernetes.io/dockerconfigjson"
 }
 
 resource "kubernetes_secret" "goblin-wrangler-github" {
@@ -183,14 +187,4 @@ resource "kustomization_resource" "goblin-wrangler-ci" {
     for_each = data.kustomization.goblin-wrangler-ci.ids
 
     manifest = data.kustomization.goblin-wrangler-ci.manifests[each.value]
-}
-
-data "kustomization" "goblin-wrangler-registry" {
-    path = "${path.module}/registry"
-}
-
-resource "kustomization_resource" "goblin-wrangler-registry" {
-    for_each = data.kustomization.goblin-wrangler-registry.ids
-
-    manifest = data.kustomization.goblin-wrangler-registry.manifests[each.value]
 }
