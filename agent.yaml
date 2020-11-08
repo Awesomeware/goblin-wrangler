@@ -8,7 +8,7 @@ spec:
   serviceAccountName: ci-worker
   containers:
   - name: docker
-    image: docker:19.03.8
+    image: vitalbeats/aws-docker-builder:latest
     resources:
       limits:
         memory: "128Mi"
@@ -24,26 +24,8 @@ spec:
       - name: dockercfg
         mountPath: /root/.docker
         readOnly: true
-  - name: kubectl
-    image: lachlanevenson/k8s-kubectl:latest
-    resources:
-      limits:
-        memory: "128Mi"
-        cpu: "500m"
-    tty: true
-    command:
-      - cat
   - name: python
-    image: python:3.7
-    resources:
-      limits:
-        memory: "128Mi"
-        cpu: "500m"
-    tty: true
-    command:
-      - cat
-  - name: busybox
-    image: busybox:latest
+    image: python:3.8
     resources:
       limits:
         memory: "128Mi"

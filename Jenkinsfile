@@ -37,12 +37,10 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                container('busybox') {
+                container('docker') {
                     sh "sed -i s#KINGPIN_NAMESPACE#${env.BRANCH_NAME.toLowerCase()}#g artificer/kingpin/namespace.yaml"
                     sh "sed -i s#KINGPIN_HOST#${env.BRANCH_NAME == 'main' ? '' : env.BRANCH_NAME.toLowerCase() + '.'}goblinwrangler.com#g artificer/kingpin/kingpin.yaml"
                     sh "sed -i s#KINGPIN_IMAGE#registry.digitalocean.com/goblin-wrangler/${env.BRANCH_NAME.toLowerCase()}/kingpin:latest#g artificer/kingpin/kingpin.yaml"
-                }
-                container('kubectl') {
                     sh "kubectl apply -f artificer/kingpin/namespace.yaml"
                     sh "kubectl apply -k artificer/kingpin/ -n ${env.BRANCH_NAME.toLowerCase()}"
                 }
