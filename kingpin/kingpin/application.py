@@ -39,6 +39,7 @@ migrate = Migrate(application, db)
 
 def handle_authorize(_remote, token, user_info):
     """ Handles successful authorization via OAuth """
+    user = {'id': None}
     if user_info:
         user = functions.create_or_update_user(user_info)
         login_user(user)
