@@ -30,7 +30,7 @@ pipeline {
         stage('Node') {
             steps {
                 container('node') {
-                    sh 'cd entertainer && yarn build'
+                    sh 'cd entertainer && yarn install && yarn build'
                 }
             }
         }
