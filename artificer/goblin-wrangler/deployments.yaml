@@ -1,40 +1,36 @@
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: kingpin
-  annotations:
-    kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  name: postgres
 spec:
-  tls:
-    - hosts:
-        - KINGPIN_HOST
-      secretName: kingpin-tls
-  rules:
-    - host: KINGPIN_HOST
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: kingpin
-                port:
-                  name: app
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: kingpin
-spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: Recreate
   selector:
-    app: kingpin
-  ports:
-   - name: app
-     protocol: TCP
-     port: 4000
-     targetPort: 4000
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+          envFrom:
+            - secretRef:
+                name: postgres-login
+      securityContext:
+        fsGroup: 2000
+      volumes:
+        - name: postgres-data
+          emptyDir: {}
 
 ---
 apiVersion: apps/v1
