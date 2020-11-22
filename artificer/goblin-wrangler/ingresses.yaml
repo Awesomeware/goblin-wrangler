@@ -21,3 +21,10 @@ spec:
                 name: kingpin
                 port:
                   name: app
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: entertainer
+                port:
+                  name: site

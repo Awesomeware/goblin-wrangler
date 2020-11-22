@@ -75,3 +75,42 @@ spec:
               port: 4000
       imagePullSecrets:
         - name: goblin-wrangler
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: entertainer
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: entertainer
+  template:
+    metadata:
+      labels:
+        app: entertainer
+    spec:
+      containers:
+        - name: entertainer
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: site
+              mountPath: /usr/share/nginx/html
+              readOnly: true
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+      volumes:
+        - name: site
+          emptyDir: {}
