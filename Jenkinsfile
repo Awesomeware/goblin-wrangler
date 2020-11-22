@@ -51,6 +51,7 @@ pipeline {
                     sh "sed -i s#KINGPIN_IMAGE#registry.digitalocean.com/goblin-wrangler/${env.BRANCH_NAME.toLowerCase()}/kingpin:latest#g artificer/goblin-wrangler/deployments.yaml"
                     sh "kubectl apply -f artificer/goblin-wrangler/namespace.yaml"
                     sh "kubectl apply -k artificer/goblin-wrangler/ -n ${env.BRANCH_NAME.toLowerCase()}"
+                    sh "mv entertainer/build entertainer/html && kubectl cp entertainer/html ${env.BRANCH_NAME.toLowerCase()}/\$(kubectl get pod -o name -l app=entertainer -n ${env.BRANCH_NAME.toLowerCase()} | cut -d '/' -f 2):/usr/share/nginx && mv entertainer/html entertainer/build"
                 }
             }
 
