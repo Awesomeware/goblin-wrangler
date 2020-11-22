@@ -35,7 +35,7 @@ class User(UserMixin, db.Model):
         return '<User {}>'.format(self.email)
 
 
-class Party(db.Model):  #noqa
+class Party(db.Model):  # noqa
     """ Parties represent a group of players who play game together """
     __tablename__ = 'party'
     id = Column(UUID(as_uuid=True),
