@@ -1,7 +1,7 @@
 """ Management of the schema """
 
 from flask_script import Manager
-from flask_migrate import Migrate, MigrateCommand
+from flask_migrate import MigrateCommand
 from kingpin.application import application
 
 manager = Manager(application)
