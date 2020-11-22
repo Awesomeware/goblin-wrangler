@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: ci-server
-          image: jenkins/jenkins:2.265
+          image: jenkins/jenkins:2.267
           ports:
             - containerPort: 8080
             - containerPort: 50000
