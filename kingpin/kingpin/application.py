@@ -58,7 +58,7 @@ def load_user(user_id):
     return None
 
 
-@application.route('/loggedin', methods=['GET'])
+@application.route('/api/loggedin', methods=['GET'])
 @login_required
 def logged_in():
     """ Shows whether we are logged in or not """
@@ -71,9 +71,9 @@ def logged_in():
 oauth = OAuth(application)
 auth_api = create_flask_blueprint(backends, oauth, handle_authorize)
 
-application.register_blueprint(auth_api, url_prefix='')
-application.register_blueprint(healthcheck_api, url_prefix='/health')
-application.register_blueprint(user_api, url_prefix='/user')
+application.register_blueprint(auth_api, url_prefix='/api')
+application.register_blueprint(healthcheck_api, url_prefix='/api/health')
+application.register_blueprint(user_api, url_prefix='/api/user')
 
 if __name__ == "__main__":
     application.run(host='0.0.0.0', port=4000)

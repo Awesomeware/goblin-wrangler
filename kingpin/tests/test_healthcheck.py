@@ -9,5 +9,5 @@ def client():
         yield client
 
 def test_healthcheck_okay(client):
-    rv = client.get('/health/check')
+    rv = client.get('/api/health/check')
     assert rv.status_code == 200, "Status code should be 200"
