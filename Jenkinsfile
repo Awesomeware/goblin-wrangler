@@ -27,6 +27,14 @@ pipeline {
             }
         }
 
+        stage('Node') {
+            steps {
+                container('node') {
+                    sh 'cd entertainer && yarn build'
+                }
+            }
+        }
+
         stage('Docker') {
             steps {
                 container('docker') {

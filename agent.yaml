@@ -33,6 +33,15 @@ spec:
     tty: true
     command:
       - cat
+  - name: node
+    image: node:latest
+    resources:
+      limits:
+        memory: "512Mi"
+        cpu: "500m"
+    tty: true
+    command:
+      - cat
   volumes:
     - name: dockersocket
       hostPath:

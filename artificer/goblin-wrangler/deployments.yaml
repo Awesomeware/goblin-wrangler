@@ -102,7 +102,6 @@ spec:
           volumeMounts:
             - name: site
               mountPath: /usr/share/nginx/html
-              readOnly: true
           livenessProbe:
             httpGet:
               path: /
