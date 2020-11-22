@@ -71,11 +71,11 @@ spec:
                 name: google-oauth
           livenessProbe:
             httpGet:
-              path: /health/check
+              path: /api/health/check
               port: 4000
           readinessProbe:
             httpGet:
-              path: /health/check
+              path: /api/health/check
               port: 4000
       imagePullSecrets:
         - name: goblin-wrangler
