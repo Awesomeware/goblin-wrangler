@@ -9,6 +9,7 @@ spec:
   tls:
     - hosts:
         - GOBLINWRANGLER_HOST
+        - www.GOBLINWRANGLER_HOST
       secretName: goblin-wrangler-tls
   rules:
     - host: GOBLINWRANGLER_HOST
