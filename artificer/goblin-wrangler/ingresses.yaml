@@ -29,3 +29,20 @@ spec:
                 name: entertainer
                 port:
                   name: site
+    - host: www.GOBLINWRANGLER_HOST
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: kingpin
+                port:
+                  name: app
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: entertainer
+                port:
+                  name: site
