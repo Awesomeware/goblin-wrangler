@@ -47,7 +47,7 @@ pipeline {
             steps {
                 container('docker') {
                     sh "sed -i s#GOBLINWRANGLER_NAMESPACE#${env.BRANCH_NAME.toLowerCase()}#g artificer/goblin-wrangler/namespace.yaml"
-                    sh "sed -i s#GOBLINWRANGLER_HOST#${env.BRANCH_NAME == 'main' ? '' : env.BRANCH_NAME.toLowerCase() + '.'}goblinwrangler.com#g artificer/goblin-wrangler/ingresses.yaml"
+                    sh "sed -i s#GOBLINWRANGLER_HOST#${env.BRANCH_NAME == 'main' ? '' : env.BRANCH_NAME.toLowerCase() + '.pr.'}goblinwrangler.com#g artificer/goblin-wrangler/ingresses.yaml"
                     sh "sed -i s#KINGPIN_IMAGE#registry.digitalocean.com/goblin-wrangler/${env.BRANCH_NAME.toLowerCase()}/kingpin:latest#g artificer/goblin-wrangler/deployments.yaml"
                     sh "kubectl apply -f artificer/goblin-wrangler/namespace.yaml"
                     sh "kubectl apply -k artificer/goblin-wrangler/ -n ${env.BRANCH_NAME.toLowerCase()}"
@@ -59,7 +59,7 @@ pipeline {
                 success {
                     script {
                         if (env.CHANGE_ID) {
-                            pullRequest.createStatus(status: 'success', context: 'continuous-integration/jenkins/deployment', description: 'Pull request is deployed', targetUrl: "https://${env.BRANCH_NAME.toLowerCase()}.goblinwrangler.com")
+                            pullRequest.createStatus(status: 'success', context: 'continuous-integration/jenkins/deployment', description: 'Pull request is deployed', targetUrl: "https://${env.BRANCH_NAME.toLowerCase()}.pr.goblinwrangler.com")
                         }
                     }
                 }
