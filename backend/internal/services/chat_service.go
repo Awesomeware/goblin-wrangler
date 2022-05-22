@@ -1,6 +1,10 @@
 package services
 
-import "awesomeware.org/kingpin/internal/models"
+import (
+	"database/sql"
+
+	"awesomeware.org/kingpin/internal/models"
+)
 
 type ChatService interface {
 	Save(models.ChatMessage) models.ChatMessage
@@ -8,11 +12,14 @@ type ChatService interface {
 }
 
 type chatService struct {
+	DB       *sql.DB
 	messages []models.ChatMessage
 }
 
-func New() ChatService {
-	return &chatService{}
+func New(db *sql.DB) ChatService {
+	return &chatService{
+		DB: db,
+	}
 }
 
 func (model *chatService) Save(msg models.ChatMessage) models.ChatMessage {
