@@ -3,8 +3,8 @@ package controllers
 import (
 	"net/http"
 
-	"awesomeware.org/kingpin/internal/models"
-	"awesomeware.org/kingpin/internal/services"
+	"awesomeware.org/goblin-wrangler/internal/models"
+	"awesomeware.org/goblin-wrangler/internal/services"
 	"github.com/gin-gonic/gin"
 )
 

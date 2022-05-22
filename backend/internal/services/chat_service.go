@@ -3,7 +3,7 @@ package services
 import (
 	"database/sql"
 
-	"awesomeware.org/kingpin/internal/models"
+	"awesomeware.org/goblin-wrangler/internal/models"
 )
 
 type ChatService interface {
@@ -24,6 +24,7 @@ func New(db *sql.DB) ChatService {
 
 func (model *chatService) Save(msg models.ChatMessage) models.ChatMessage {
 	model.messages = append(model.messages, msg)
+
 	return msg
 }
 

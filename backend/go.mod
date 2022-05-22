@@ -1,4 +1,4 @@
-module awesomeware.org/kingpin
+module awesomeware.org/goblin-wrangler
 
 go 1.18
 
