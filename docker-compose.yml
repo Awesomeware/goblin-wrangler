@@ -22,6 +22,14 @@ services:
       - DB_HOST=db
       - DB_PORT=5432
       - DB_NAME=postgres
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - '9000:9000'
+    environment:
+      - PORT=9000
 volumes:
   db:
     driver: local
