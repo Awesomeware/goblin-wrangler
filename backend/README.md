@@ -6,3 +6,5 @@ Designed to be transitioned to a microservice architecture over time, but I coul
 really be bothered to deploy a ton of services and thus need to dip into k8s straight
 away. So for now the whole backend is contained in 'backend' and 'web' for a backend
 service and web SPA respectively.
+
+Built by Google Cloud Build as an image to be run by Cloud Run.
