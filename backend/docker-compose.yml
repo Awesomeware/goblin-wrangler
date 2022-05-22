@@ -1,0 +1,10 @@
+version: '3'
+services:
+  chat:
+    build: 
+      context: .
+      dockerfile: ./docker/app/Dockerfile
+      args:
+        SERVICE: backend
+    ports:
+      - "8001:8001"
