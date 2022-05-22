@@ -11,7 +11,7 @@
         "source": "/api",
         "run": {
           "serviceId": "goblin-wrangler",
-          "region": "eu-north1"
+          "region": "europe-north1"
         }
       },
       {
