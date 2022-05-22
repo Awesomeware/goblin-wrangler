@@ -8,13 +8,6 @@
     ],
     "rewrites": [
       {
-        "source": "/api",
-        "run": {
-          "serviceId": "goblin-wrangler",
-          "region": "europe-north1"
-        }
-      },
-      {
         "source": "**",
         "destination": "/index.html"
       }
