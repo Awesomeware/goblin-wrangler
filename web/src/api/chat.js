@@ -1,14 +1,9 @@
-// @ts-check
-
-/**
- * @param {import("axios").AxiosInstance} axios
- */
-export default (axios) => ({
-  async say(msg) {
-    return axios.post("/chat", msg);
+export default (/** @type import("axios").AxiosStatic */ axios) => ({
+  say: function say(msg) {
+    return axios.post("/api/chat", msg);
   },
 
-  async getAll() {
-    return this.axios.get("/chat");
+  getAll: function getAll() {
+    return axios.get("/api/chat");
   },
 });

@@ -1,5 +1,4 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
-import API from "@/api/api";
 
 export const useChatStore = defineStore({
   id: "chat_messages",
@@ -16,6 +15,9 @@ export const useChatStore = defineStore({
      */
     say(msg) {
       this.messages.push(msg);
+
+      this.api.chat.say(msg);
+
       API.chat.say(msg).then(
         (v) => {
           console.log("Got " + v + " back");
