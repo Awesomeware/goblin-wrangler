@@ -2,17 +2,21 @@
   "name": "web-vue",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview --port 9090",
     "test:unit": "vitest --environment jsdom",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+    "dev": "vite",
+    "preview": "vite preview --port 9090"
   },
   "dependencies": {
+    "@mdi/font": "5.9.55",
     "axios": "^0.27.2",
     "pinia": "^2.0.13",
+    "roboto-fontface": "*",
     "vue": "^3.2.33",
-    "vue-router": "^4.0.14"
+    "vue-router": "^4.0.14",
+    "vuetify": "^3.0.0-beta.0",
+    "webfontloader": "^1.0.0"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.0",
@@ -25,6 +29,9 @@
     "jsdom": "^19.0.0",
     "prettier": "^2.5.1",
     "vite": "^2.9.5",
-    "vitest": "^0.9.3"
+    "vite-plugin-vuetify": "^1.0.0-alpha.0",
+    "vitest": "^0.9.3",
+    "vue-cli-plugin-vuetify": "~2.5.0",
+    "webpack-plugin-vuetify": "^2.0.0-alpha.0"
   }
 }
