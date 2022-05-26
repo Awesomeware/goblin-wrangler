@@ -1,5 +1,7 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
+
+const apiurl = import.meta.env.VITE_API_BASE_URL || "No API url defined";
 </script>
 
 <template>
@@ -7,7 +9,7 @@ import { RouterLink, RouterView } from "vue-router";
     <v-navigation-drawer app theme="dark" permanent>
       <v-list density="compact" nav>
         <v-list-item prepend-icon="mdi-view-dashboard">
-          <RouterLink to="/">Home</RouterLink>
+          <RouterLink to="/">Homey</RouterLink>
         </v-list-item>
         <v-list-item prepend-icon="mdi-gavel">
           <RouterLink to="/about">About</RouterLink>
@@ -15,6 +17,7 @@ import { RouterLink, RouterView } from "vue-router";
         <v-list-item prepend-icon="mdi-account-box">
           <RouterLink to="/login">Login</RouterLink>
         </v-list-item>
+        <v-list-item>{{ apiurl }}</v-list-item>
       </v-list>
     </v-navigation-drawer>
 
@@ -27,7 +30,8 @@ import { RouterLink, RouterView } from "vue-router";
 </template>
 
 <style>
-@import "@/assets/base.css";
+@import "./assets/base.css";
+
 a,
 .green {
   text-decoration: none;

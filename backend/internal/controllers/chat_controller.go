@@ -13,21 +13,21 @@ type ChatController interface {
 	Save(ctx *gin.Context)
 }
 
-type controller struct {
+type chatController struct {
 	service services.ChatService
 }
 
-func New(svc services.ChatService) ChatController {
-	return &controller{
+func NewChatController(svc services.ChatService) ChatController {
+	return &chatController{
 		service: svc,
 	}
 }
 
-func (c *controller) FindAll(ctx *gin.Context) {
+func (c *chatController) FindAll(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, c.service.FindAll())
 }
 
-func (c *controller) Save(ctx *gin.Context) {
+func (c *chatController) Save(ctx *gin.Context) {
 	var chatMsg models.ChatMessage
 	ctx.BindJSON(&chatMsg)
 	c.service.Save(chatMsg)

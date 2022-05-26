@@ -1,5 +1,10 @@
 FROM node:lts-alpine
 
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL ${VITE_API_BASE_URL}
+
+RUN echo ${VITE_API_BASE_URL}
+
 # install simple http server for serving static content
 RUN npm install -g http-server
 
@@ -16,6 +21,6 @@ RUN npm install
 COPY . .
 
 # build app for production with minification
-RUN npm run build
+RUN npm run build:dev
 
 CMD [ "http-server", "dist" ]

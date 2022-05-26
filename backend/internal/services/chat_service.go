@@ -16,7 +16,7 @@ type chatService struct {
 	messages []models.ChatMessage
 }
 
-func New(db *sql.DB) ChatService {
+func NewChatService(db *sql.DB) ChatService {
 	return &chatService{
 		DB: db,
 	}

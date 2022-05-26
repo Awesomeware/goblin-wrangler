@@ -26,10 +26,13 @@ services:
     build:
       context: ./web
       dockerfile: Dockerfile
+      args:
+        - VITE_API_BASE_URL=https://backend
     ports:
       - '9000:9000'
     environment:
       - PORT=9000
+      
 volumes:
   db:
     driver: local
