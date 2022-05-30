@@ -5,11 +5,18 @@ import (
 	"os"
 
 	"awesomeware.org/goblin-wrangler/internal/controllers"
+	"awesomeware.org/goblin-wrangler/internal/db"
 	"awesomeware.org/goblin-wrangler/internal/services"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
+
+func setupViper() {
+	viper.SetEnvPrefix("vpr")
+	viper.AutomaticEnv()
+	viper.SetDefault("PORT", "8080")
+}
 
 func getCorsConfig() cors.Config {
 	corsConfig := cors.DefaultConfig()
@@ -42,10 +49,9 @@ type app struct {
 }
 
 func main() {
-	viper.SetEnvPrefix("vpr")
-	viper.AutomaticEnv()
+	setupViper()
 
-	dbPool, err := initDb()
+	dbPool, err := db.New()
 	if err != nil {
 		log.Fatalln(err)
 		os.Exit(1)
@@ -64,5 +70,5 @@ func main() {
 	router, closeable := createRouter(app)
 	defer closeable()
 
-	router.Run(":8080")
+	router.Run(":" + viper.GetString("PORT"))
 }

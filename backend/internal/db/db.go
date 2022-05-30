@@ -1,4 +1,4 @@
-package main
+package db
 
 import (
 	"database/sql"
@@ -18,7 +18,7 @@ func mustGetenv(k string) string {
 	return v
 }
 
-func initDb() (*sql.DB, error) {
+func New() (*sql.DB, error) {
 	if viper.GetString("DB_SOCKET_DIR") != "" {
 		return initSocketConnectionPool()
 	} else {
