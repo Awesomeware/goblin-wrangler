@@ -16,7 +16,6 @@ const apiurl = import.meta.env.VITE_API_BASE_URL || "No API url defined";
         <v-list-item prepend-icon="mdi-account-box">
           <RouterLink to="/login">Login</RouterLink>
         </v-list-item>
-        <v-list-item>{{ apiurl }}</v-list-item>
       </v-list>
     </v-navigation-drawer>
 
