@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set API base URL
-        run: echo "VITE_API_BASE_URL=$API_BASE_URL" > .env.development
+        run: echo VITE_API_BASE_URL="$API_BASE_URL" > .env.production
         env:
           API_BASE_URL: ${{ secrets.API_BASE_URL }}
       - run: npm ci && npm run build
