@@ -12,7 +12,6 @@ import (
 
 func mustGetenv(k string) string {
 	v := viper.GetString(k)
-	fmt.Printf("env: %s=%s\n", k, v)
 	if v == "" {
 		log.Fatalf("Warning: %s environment variable not set.\n", k)
 	}
