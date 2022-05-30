@@ -11,13 +11,15 @@ on:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-    environment: production
     defaults:
       run:
         working-directory: ./web
     steps:
       - uses: actions/checkout@v2
-      - run: echo "VITE_API_BASE_URL=$API_BASE_URL" > .env.production
+      - name: Set API base URL
+        run: echo "VITE_API_BASE_URL=$API_BASE_URL" > .env.development
+        env:
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
       - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:

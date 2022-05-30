@@ -9,4 +9,11 @@ docker-compose build
 docker-compose up -d
 ```
 
-The service will then be available via [Localhost](http://localhost:4000).
+The service will then be available via [Localhost](http://localhost:9000).
+
+## Infrastructure
+
+TODO: Elaborate.
+
+* Cloud Run for backend, with a cloud run trigger to build new releases of backend/ on changes.
+* Firebase Hosting for frontend, using GitHub CI/CD to build new releases of web/ on changes.
