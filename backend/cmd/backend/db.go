@@ -4,14 +4,16 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"os"
 	"time"
 
 	_ "github.com/jackc/pgx/v4/stdlib"
+	"github.com/spf13/viper"
 )
 
 func mustGetenv(k string) string {
-	v := os.Getenv(k)
+	//v := os.Getenv(k)
+	v := viper.GetString(k)
+	fmt.Printf("env: %s=%s\n", k, v)
 	if v == "" {
 		log.Fatalf("Warning: %s environment variable not set.\n", k)
 	}
@@ -19,16 +21,14 @@ func mustGetenv(k string) string {
 }
 
 func initDb() (*sql.DB, error) {
-	_, isSet := os.LookupEnv("DB_SOCKET_DIR")
-	if isSet {
+	if viper.GetString("DB_SOCKET_DIR") != "" {
 		return initSocketConnectionPool()
 	} else {
 		return initTCPConnectionPool()
 	}
 }
 
-// initSocketConnectionPool initializes a Unix socket connection pool for
-// a Cloud SQL instance of SQL Server.
+// initSocketConnectionPool initializes a Unix socket connection pool
 func initSocketConnectionPool() (*sql.DB, error) {
 	var (
 		dbUser                 = mustGetenv("DB_USER")
@@ -50,8 +50,7 @@ func initSocketConnectionPool() (*sql.DB, error) {
 	return dbPool, nil
 }
 
-// initTCPConnectionPool initializes a TCP connection pool for a Cloud SQL
-// instance of SQL Server.
+// initTCPConnectionPool initializes a TCP connection pool
 func initTCPConnectionPool() (*sql.DB, error) {
 	var (
 		dbUser    = mustGetenv("DB_USER")

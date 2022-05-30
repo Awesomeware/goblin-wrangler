@@ -1,6 +1,5 @@
-<script setup>
+<script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
-
 const apiurl = import.meta.env.VITE_API_BASE_URL || "No API url defined";
 </script>
 

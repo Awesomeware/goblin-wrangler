@@ -1,1 +1,8 @@
-"python.autoComplete.extraPaths": ["./kingpin"]
+{
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": true,
+  "[typescript]": {
+    "editor.tabSize": 2
+  }
+}

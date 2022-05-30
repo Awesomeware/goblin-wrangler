@@ -15,7 +15,8 @@ jobs:
         working-directory: ./web
     steps:
       - uses: actions/checkout@v2
-      - run: npm ci && npm run build
+      - run: echo "VITE_API_BASE_URL=$API_BASE_URL" > .env.development
+      - run: npm ci && npm run build:dev
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'

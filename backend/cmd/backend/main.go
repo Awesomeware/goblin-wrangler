@@ -8,17 +8,21 @@ import (
 	"awesomeware.org/goblin-wrangler/internal/services"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 )
 
-func createRouter(app *app) (*gin.Engine, func()) {
-	g := gin.Default()
-
+func getCorsConfig() cors.Config {
 	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowOrigins = []string{"http://localhost:3000"} // Yeah, this needs to change ;)
+	corsConfig.AllowOrigins = []string{viper.GetString("FRONTEND_CORS_ORIGIN")}
 	corsConfig.AllowCredentials = true
 	corsConfig.AllowHeaders = []string{"Origin", "Authorization", "Content-Type"}
 	corsConfig.AddAllowMethods("OPTIONS")
-	g.Use(cors.New(corsConfig))
+	return corsConfig
+}
+
+func createRouter(app *app) (*gin.Engine, func()) {
+	g := gin.Default()
+	g.Use(cors.New(getCorsConfig()))
 
 	chat := g.Group("/chat")
 	{
@@ -38,6 +42,9 @@ type app struct {
 }
 
 func main() {
+	viper.SetEnvPrefix("vpr")
+	viper.AutomaticEnv()
+
 	dbPool, err := initDb()
 	if err != nil {
 		log.Fatalln(err)

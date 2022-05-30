@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import api from "@/api";
+import { LoginRequest } from "@/api/auth";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -7,13 +8,13 @@ export const useAuthStore = defineStore("auth", {
   }),
 
   getters: {
-    loggedIn() {
+    loggedIn(): boolean {
       return this.user != null;
     },
   },
 
   actions: {
-    async login(credentials) {
+    async login(credentials: LoginRequest) {
       const token = await api.auth.login(credentials);
       localStorage.setItem("token", token);
       await this.getUser();

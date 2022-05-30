@@ -2,7 +2,7 @@ import axios from "axios";
 import { useErrorStore } from "@/stores/error";
 
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
-axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
+axios.defaults.headers.common["Authorization"] = localStorage.getItem("token") || "";
 axios.defaults.withCredentials = true;
 
 axios.interceptors.request.use(

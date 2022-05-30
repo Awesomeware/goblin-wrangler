@@ -17,17 +17,18 @@ services:
     ports:
       - '8080:8080'
     environment:
-      - DB_USER=postgres
-      - DB_PASS=postgres
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_NAME=postgres
+      - VPR_DB_USER=postgres
+      - VPR_DB_PASS=postgres
+      - VPR_DB_HOST=db
+      - VPR_DB_PORT=5432
+      - VPR_DB_NAME=postgres
+      - VPR_FRONTEND_CORS_ORIGIN=http://localhost:3000
   web:
     build:
       context: ./web
       dockerfile: Dockerfile
       args:
-        - VITE_API_BASE_URL=https://backend
+        - VITE_API_BASE_URL=http://localhost:8080
     ports:
       - '9000:9000'
     environment:
