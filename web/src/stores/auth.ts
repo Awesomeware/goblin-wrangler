@@ -1,11 +1,16 @@
-import { defineStore } from "pinia";
+import { acceptHMRUpdate, defineStore } from "pinia";
 import api from "@/api";
-import { LoginRequest } from "@/api/auth";
+import { AuthLoginRequest } from "@/models/requests";
+import User from "@/models/user.model";
+
+export type AuthState = {
+  user: User | null;
+};
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     user: null,
-  }),
+  } as AuthState),
 
   getters: {
     loggedIn(): boolean {
@@ -14,7 +19,7 @@ export const useAuthStore = defineStore("auth", {
   },
 
   actions: {
-    async login(credentials: LoginRequest) {
+    async login(credentials: AuthLoginRequest) {
       const token = await api.auth.login(credentials);
       localStorage.setItem("token", token);
       await this.getUser();
@@ -30,3 +35,7 @@ export const useAuthStore = defineStore("auth", {
     },
   },
 });
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useAuthStore, import.meta.hot));
+}

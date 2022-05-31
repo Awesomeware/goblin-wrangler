@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 
-type ErrorStore = {
+export type ErrorStore = {
   message: string | null;
   errors: {[key: string]: any};
 };
