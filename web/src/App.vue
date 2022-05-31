@@ -2,14 +2,18 @@
 import { RouterLink, RouterView } from "vue-router";
 import { useErrorStore } from "@/stores/error";
 import { useAuthStore } from "@/stores/auth";
-import { onBeforeUnmount } from "vue";
+import { onBeforeUnmount, ref } from "vue";
 
 const error = useErrorStore();
 const auth = useAuthStore();
 
+const ssoKey = ref(0);
+
 const onCredentialResponse = (credentials: any) => {
-  auth.onGoogleSignin(credentials)
+  auth.onGoogleSignin(credentials);
+  ssoKey.value++; // https://medium.com/emblatech/ways-to-force-vue-to-re-render-a-component-df866fbacf47
 };
+
 onBeforeUnmount(() => error.$reset());
 </script>
 
@@ -24,7 +28,7 @@ onBeforeUnmount(() => error.$reset());
           <RouterLink to="/about">About</RouterLink>
         </v-list-item>
         <v-list-item>
-          <div v-google="onCredentialResponse" />
+          <div v-google="onCredentialResponse" :key="ssoKey" />
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
