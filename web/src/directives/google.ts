@@ -9,7 +9,7 @@ export default {
     // @ts-ignore
     google.accounts.id.renderButton(
       el,
-      { theme: 'outline', size: 'large' }
+      { theme: 'outline', size: 'medium', text: 'continue_with' }
     );
   }
 };

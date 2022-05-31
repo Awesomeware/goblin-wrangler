@@ -6,6 +6,7 @@ import * as jose from 'jose';
 
 export type AuthState = {
   user: User | null;
+  googleID: string | null;
   email: string | null;
 };
 
@@ -18,7 +19,8 @@ export type GoogleCredentialResponse = {
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     user: null,
-    email: null
+    email: null,
+    googleID: null
   } as AuthState),
 
   getters: {
@@ -28,7 +30,7 @@ export const useAuthStore = defineStore("auth", {
   },
 
   actions: {
-    onGoogleSignin(credentials: GoogleCredentialResponse) {
+    async loginWithGoogle(credentials: GoogleCredentialResponse) {
       try {
         const jwt: any = jose.decodeJwt(credentials.credential);
         console.log('Decoded response:', jwt);
@@ -41,15 +43,17 @@ export const useAuthStore = defineStore("auth", {
         ) {
           console.log('Seems valid!');
           this.email = jwt.email;
-          // TODO: Now toss JWT to backend and ask for user details, and possibly
-          // get/set some kind of session token to also track session, since Google no longer
-          // does that ^^
+          // TODO: Probably acquire our own JWT from backend that we can use to auth against the backend,
+          // in addition to the Google one. All the Google one really does is replace username/password,
+          // by providing a JWT with a verified Google user with a specific e-mail and Google ID.
+          return true;
         } else {
           console.log('Not valid!');
         }
       } catch (err) {
         console.error('Err:', err);
       }
+      return false;
     },
 
     async login(credentials: AuthLoginRequest) {
@@ -60,6 +64,13 @@ export const useAuthStore = defineStore("auth", {
 
     async logout() {
       localStorage.removeItem("token");
+      // @ts-ignore
+      google.accounts.id.disableAutoSelect()
+      const gID = useAuthStore().googleID;
+      if (gID) {
+        // @ts-ignore
+        google.accounts.id.revoke(gID);
+      }
       this.$reset();
     },
 

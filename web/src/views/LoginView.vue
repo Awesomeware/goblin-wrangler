@@ -1,4 +1,7 @@
 <template>
+  <div ref="googleSSO" />
+  <div style="margin-top: 25px; border-top: 1px solid #edeff1; width: 40%" />
+  OR...
   <form @submit.prevent="onSubmit">
     <div class="mb-3 row">
       <label for="email" class="col-sm-4 col-form-label text-sm-end">
@@ -59,13 +62,15 @@
       </div>
     </div>
   </form>
+  
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeUnmount } from "vue";
+import { ref, onBeforeUnmount, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { useErrorStore } from "@/stores/error";
+
 const credentials = ref({ email: "", password: "" });
 const loading = ref(false);
 const router = useRouter();
@@ -78,4 +83,27 @@ const onSubmit = () => {
     .catch(() => (loading.value = !loading.value));
 };
 onBeforeUnmount(() => error.$reset());
+
+const googleSSO = ref();
+
+const onCreds = (credentials: any) => {
+  useAuthStore()
+    .loginWithGoogle(credentials)
+    .then(() => router.push({ name: 'home' }))
+};
+
+onMounted(() => {
+  // @ts-ignore
+  google.accounts.id.initialize({
+    client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+    callback: onCreds
+  });
+
+  // @ts-ignore
+  google.accounts.id.renderButton(
+    googleSSO.value,
+    { theme: 'outline', size: 'large', text: 'continue_with' }
+  );
+});
+
 </script>

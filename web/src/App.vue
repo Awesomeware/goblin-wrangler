@@ -7,14 +7,19 @@ import { onBeforeUnmount, ref } from "vue";
 const error = useErrorStore();
 const auth = useAuthStore();
 
-const ssoKey = ref(0);
-
-const onCredentialResponse = (credentials: any) => {
-  auth.onGoogleSignin(credentials);
-  ssoKey.value++; // https://medium.com/emblatech/ways-to-force-vue-to-re-render-a-component-df866fbacf47
-};
-
 onBeforeUnmount(() => error.$reset());
+
+const onClickLogout = () => {
+  // @ts-ignore
+  google.accounts.id.disableAutoSelect()
+  const gID = useAuthStore().googleID;
+  if (gID) {
+    // @ts-ignore
+    google.accounts.id.revoke(gID);
+  }
+
+  useAuthStore().logout();
+};
 </script>
 
 <template>
@@ -22,13 +27,16 @@ onBeforeUnmount(() => error.$reset());
     <v-navigation-drawer app theme="dark" permanent>
       <v-list density="compact" nav>
         <v-list-item prepend-icon="mdi-view-dashboard">
-          <RouterLink to="/">Homey</RouterLink>
+          <RouterLink to="/">Home</RouterLink>
         </v-list-item>
         <v-list-item prepend-icon="mdi-gavel">
           <RouterLink to="/about">About</RouterLink>
         </v-list-item>
-        <v-list-item>
-          <div v-google="onCredentialResponse" :key="ssoKey" />
+        <v-list-item prepend-icon="mdi-login" :hidden="!(auth.email == null)">
+          <RouterLink to="/login">Log in / Sign up</RouterLink>
+        </v-list-item>
+        <v-list-item prepend-icon="mdi-login" :hidden="auth.email == null">
+          <button @click="onClickLogout">Log out</button>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
