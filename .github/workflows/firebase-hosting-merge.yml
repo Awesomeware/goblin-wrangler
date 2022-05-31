@@ -6,7 +6,6 @@ on:
   push:
     paths:
     - 'web/**'
-    - '.github/workflows/**'
     branches:
       - main
 jobs:
