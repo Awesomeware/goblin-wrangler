@@ -1,3 +1,4 @@
 # VSCode
 .vscode/targets.log
+.vscode/*.log
 
