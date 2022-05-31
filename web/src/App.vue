@@ -10,7 +10,6 @@ const auth = useAuthStore();
 const onCredentialResponse = (credentials: any) => {
   auth.onGoogleSignin(credentials)
 };
-
 onBeforeUnmount(() => error.$reset());
 </script>
 
