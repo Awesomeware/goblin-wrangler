@@ -1,6 +1,17 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
-const apiurl = import.meta.env.VITE_API_BASE_URL || "No API url defined";
+import { useErrorStore } from "@/stores/error";
+import { useAuthStore } from "@/stores/auth";
+import { onBeforeUnmount } from "vue";
+
+const error = useErrorStore();
+const auth = useAuthStore();
+
+const onCredentialResponse = (credentials: any) => {
+  auth.onGoogleSignin(credentials)
+};
+
+onBeforeUnmount(() => error.$reset());
 </script>
 
 <template>
@@ -13,10 +24,9 @@ const apiurl = import.meta.env.VITE_API_BASE_URL || "No API url defined";
         <v-list-item prepend-icon="mdi-gavel">
           <RouterLink to="/about">About</RouterLink>
         </v-list-item>
-        <v-list-item prepend-icon="mdi-account-box">
-          <RouterLink to="/login">Login</RouterLink>
+        <v-list-item>
+          <div v-google="onCredentialResponse" />
         </v-list-item>
-        <v-list-item>{{ apiurl }}</v-list-item>
       </v-list>
     </v-navigation-drawer>
 

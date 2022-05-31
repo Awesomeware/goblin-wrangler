@@ -14,3 +14,8 @@ Since TypeScript cannot handle type information for `.vue` imports, they are shi
 2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
 
 You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+
+## Setup for running locally
+
+* Move `.env.development.example` to `.env.development` and fill in GOOGLE_CLIENT_ID with a valid OAuth2 client ID.
+* Move `.firebaserc.example` to `.firebaserc` and fill in project with a valid GCP project name corresponding to the project tied to Firebase Hosting.
