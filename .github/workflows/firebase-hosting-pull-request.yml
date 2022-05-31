@@ -15,12 +15,13 @@ jobs:
         working-directory: ./web
     steps:
       - uses: actions/checkout@v2
-        run: |
-          echo VITE_API_BASE_URL="$API_BASE_URL" >> .env.development
-          echo VITE_GOOGLE_CLIENT_ID="$GOOGLE_CLIENT_ID" >> .env.development
+      - name: Set env variables
         env:
           API_BASE_URL: ${{ secrets.API_BASE_URL }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+        run: |
+          echo VITE_API_BASE_URL="$API_BASE_URL" >> .env.production
+          echo VITE_GOOGLE_CLIENT_ID="$GOOGLE_CLIENT_ID" >> .env.production
       - run: npm ci && npm run build:dev
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
