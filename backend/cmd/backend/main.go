@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -12,10 +13,14 @@ import (
 	"github.com/spf13/viper"
 )
 
-func setupViper() {
+func setupViper(env string) {
+	viper.SetDefault("PORT", "8080")
 	viper.SetEnvPrefix("vpr")
 	viper.AutomaticEnv()
-	viper.SetDefault("PORT", "8080")
+	viper.AddConfigPath(".")
+	viper.SetConfigName(fmt.Sprintf("viper.%s", env))
+	viper.SetConfigType("dotenv")
+	viper.ReadInConfig()
 }
 
 func getCorsConfig() cors.Config {
@@ -49,7 +54,7 @@ type app struct {
 }
 
 func main() {
-	setupViper()
+	setupViper("local")
 
 	dbPool, err := db.New()
 	if err != nil {

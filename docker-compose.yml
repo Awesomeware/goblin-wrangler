@@ -11,29 +11,22 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
   backend:
-    build: 
-      context: ./backend
-      dockerfile: Dockerfile
+    image: cosmtrek/air
+    working_dir: /app
     ports:
-      - '8080:8080'
-    environment:
-      - VPR_DB_USER=postgres
-      - VPR_DB_PASS=postgres
-      - VPR_DB_HOST=db
-      - VPR_DB_PORT=5432
-      - VPR_DB_NAME=postgres
-      - VPR_FRONTEND_CORS_ORIGIN=http://localhost:3000
+      - 8080:8080
+    volumes:
+      - ./backend:/app
   web:
-    build:
-      context: ./web
-      dockerfile: Dockerfile
-      args:
-        - VITE_API_BASE_URL=http://localhost:8080
-    ports:
-      - '9000:9000'
+    image: node:lts
+    working_dir: /var/www/html/app
+    entrypoint: npm run host
     environment:
-      - PORT=9000
-      
+      - VITE_API_BASE_URL=http://localhost:8080
+    ports:
+      - 3000:3000
+    volumes:
+      - ./web:/var/www/html/app
 volumes:
   db:
     driver: local

@@ -1,5 +1,3 @@
-include .env
-
 .PHONY: fmt
 fmt:
 	goimports -l -w internal/
