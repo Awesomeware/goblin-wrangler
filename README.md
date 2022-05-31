@@ -2,14 +2,20 @@
 Welcome to Goblin Wrangler, a tabletop gaming service!
 
 ## Local development
-It is possible to deploy Goblin Wrangler locally using [Docker Compose](https://docs.docker.com/compose/). Our compose file will deploy the Goblin Wrangler services and required databases from scratch. To deploy the service, run:
+Prior to running Goblin Wrangler locally you must do some setup:
+
+1. `cp web/.firebaserc.example web/.firebaserc` and change the my-gcp-project text to point to the GCP project you've attached to Firebase Hosting.
+1. `cp web/.env.development.example web/.env.development` and set the GOOGLE_CLIENT_ID to a valid OAuth 2 Client ID you've generated in GCP.
+
+After that it is possible to deploy Goblin Wrangler locally using [Docker Compose](https://docs.docker.com/compose/). Our compose file will deploy the 
+Goblin Wrangler services and required databases from scratch. To deploy the service, run:
 
 ```bash
 docker-compose build
 docker-compose up -d
 ```
 
-The website will then be available via [localhost](http://localhost:3000).
+The website will then be available via [localhost](http://localhost:3000). Both the backend and web projects reload on code changes.
 
 ## Project components
 
