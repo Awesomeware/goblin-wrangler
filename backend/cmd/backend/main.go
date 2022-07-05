@@ -43,6 +43,7 @@ func createRouter(app *app) (*gin.Engine, func()) {
 	}
 
 	g.POST("/login", app.AuthController.Login)
+	g.POST("/sso", app.AuthController.ValidateGoogleSSOToken)
 	g.GET("/me", app.AuthController.Me)
 
 	return g, func() {}

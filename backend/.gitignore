@@ -1,3 +1,4 @@
 go.mod*.tmp
 go.sum*.tmp
 tmp
+viper.local.env
