@@ -42,9 +42,7 @@ func createRouter(app *app) (*gin.Engine, func()) {
 		chat.POST("", app.ChatController.New)
 	}
 
-	g.POST("/login", app.AuthController.Login)
 	g.POST("/sso", app.AuthController.ValidateGoogleSSOToken)
-	g.GET("/me", app.AuthController.Me)
 
 	return g, func() {}
 }
@@ -64,9 +62,12 @@ func main() {
 	}
 
 	var chatService services.ChatService = services.NewChatService(dbPool)
-	var chatCtrl controllers.ChatController = controllers.NewChatController(chatService)
+	var userService services.UserService = services.NewUserService(dbPool)
 	var authService services.AuthService = services.NewAuthService(dbPool)
-	var authCtrl controllers.AuthController = controllers.NewAuthController(authService)
+	// TODO: JWT service with GenerateToken() / ValidateToken() for our own JWTs
+
+	var chatCtrl controllers.ChatController = controllers.NewChatController(chatService)
+	var authCtrl controllers.AuthController = controllers.NewAuthController(authService, userService)
 
 	var app = &app{
 		ChatController: chatCtrl,

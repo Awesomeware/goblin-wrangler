@@ -11,19 +11,53 @@ import (
 )
 
 type AuthController interface {
-	Login(ctx *gin.Context)
-	Me(ctx *gin.Context)
 	ValidateGoogleSSOToken(ctx *gin.Context)
+	SignupWithGoogle(ctx *gin.Context)
 }
 
 type authController struct {
-	service services.AuthService
+	authService services.AuthService
+	userService services.UserService
 }
 
-func NewAuthController(svc services.AuthService) AuthController {
+func NewAuthController(authsvc services.AuthService, usersvc services.UserService) AuthController {
 	return &authController{
-		service: svc,
+		authService: authsvc,
+		userService: usersvc,
 	}
+}
+
+func (c *authController) SignupWithGoogle(ctx *gin.Context) {
+	var req models.GoogleSignupReq
+	if err := ctx.Bind(&req); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	payload, err := c.authService.ValidateGoogleJWT(req.Token)
+	email := c.authService.GetEmailFromPayload(*payload)
+	username := req.Username
+
+	if err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	_, err = c.userService.GetUserByEmail(email)
+	if err != nil {
+		// TODO: Probably don't error on this -- maybe just skip straight to creating JWT token?
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	id, err := c.userService.CreateUser(email, username)
+	if err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	// TODO: Create and return a JWT token, rather than just a user
+	ctx.JSON(http.StatusOK, id)
 }
 
 func (c *authController) ValidateGoogleSSOToken(ctx *gin.Context) {
@@ -33,7 +67,7 @@ func (c *authController) ValidateGoogleSSOToken(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := c.service.ValidateGoogleSSOToken(token)
+	resp, err := c.authService.ValidateGoogleJWT(token)
 	if err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
@@ -45,7 +79,6 @@ func (c *authController) ValidateGoogleSSOToken(ctx *gin.Context) {
 	}
 
 	ctx.SetCookie("g_sso_jwt", token.Credential, 5, "/", ctx.Request.URL.Hostname(), false, false)
-
 	q := url.Values{}
 	q.Set("email", resp.Claims["email"].(string))
 	q.Set("name", resp.Claims["name"].(string))
@@ -54,12 +87,4 @@ func (c *authController) ValidateGoogleSSOToken(ctx *gin.Context) {
 	//location := url.URL{Host: viper.GetString("FRONTEND_CORS_ORIGIN"), Path: "/api/sso_callback", RawQuery: q.Encode()}
 	ctx.Redirect(http.StatusFound, location.String())
 	//ctx.JSON(http.StatusTemporaryRedirect, resp)
-}
-
-func (c *authController) Login(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, c.service.Login())
-}
-
-func (c *authController) Me(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, c.service.Me())
 }

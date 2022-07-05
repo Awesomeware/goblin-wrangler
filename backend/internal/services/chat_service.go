@@ -1,9 +1,8 @@
 package services
 
 import (
-	"database/sql"
-
 	"awesomeware.org/goblin-wrangler/internal/models"
+	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 type ChatService interface {
@@ -12,11 +11,11 @@ type ChatService interface {
 }
 
 type chatService struct {
-	DB       *sql.DB
+	DB       *pgxpool.Pool
 	messages []models.ChatMessage
 }
 
-func NewChatService(db *sql.DB) ChatService {
+func NewChatService(db *pgxpool.Pool) ChatService {
 	return &chatService{
 		DB: db,
 	}

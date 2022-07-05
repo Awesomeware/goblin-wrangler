@@ -1,12 +1,11 @@
 package db
 
 import (
-	"database/sql"
+	"context"
 	"fmt"
 	"log"
-	"time"
 
-	_ "github.com/jackc/pgx/v4/stdlib"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/spf13/viper"
 )
 
@@ -18,7 +17,7 @@ func mustGetenv(k string) string {
 	return v
 }
 
-func New() (*sql.DB, error) {
+func New() (*pgxpool.Pool, error) {
 	if viper.GetString("DB_SOCKET_DIR") != "" {
 		return initSocketConnectionPool()
 	} else {
@@ -27,7 +26,7 @@ func New() (*sql.DB, error) {
 }
 
 // initSocketConnectionPool initializes a Unix socket connection pool
-func initSocketConnectionPool() (*sql.DB, error) {
+func initSocketConnectionPool() (*pgxpool.Pool, error) {
 	var (
 		dbUser                 = mustGetenv("DB_USER")
 		dbPwd                  = mustGetenv("DB_PASS")
@@ -38,18 +37,16 @@ func initSocketConnectionPool() (*sql.DB, error) {
 
 	dbURI := fmt.Sprintf("user=%s password=%s database=%s host=%s/%s", dbUser, dbPwd, dbName, socketDir, instanceConnectionName)
 
-	dbPool, err := sql.Open("pgx", dbURI)
+	dbPool, err := pgxpool.Connect(context.Background(), dbURI)
 	if err != nil {
-		return nil, fmt.Errorf("sql.Open: %v", err)
+		return nil, fmt.Errorf("pgxpool.Connect: %v", err)
 	}
-
-	configureConnectionPool(dbPool)
 
 	return dbPool, nil
 }
 
 // initTCPConnectionPool initializes a TCP connection pool
-func initTCPConnectionPool() (*sql.DB, error) {
+func initTCPConnectionPool() (*pgxpool.Pool, error) {
 	var (
 		dbUser    = mustGetenv("DB_USER")
 		dbPwd     = mustGetenv("DB_PASS")
@@ -60,18 +57,10 @@ func initTCPConnectionPool() (*sql.DB, error) {
 
 	dbURI := fmt.Sprintf("host=%s user=%s password=%s port=%s database=%s", dbTCPHost, dbUser, dbPwd, dbPort, dbName)
 
-	dbPool, err := sql.Open("pgx", dbURI)
+	dbPool, err := pgxpool.Connect(context.Background(), dbURI)
 	if err != nil {
-		return nil, fmt.Errorf("sql.Open: %v", err)
+		return nil, fmt.Errorf("pgxpool.Connect: %v", err)
 	}
 
-	configureConnectionPool(dbPool)
-
 	return dbPool, nil
-}
-
-func configureConnectionPool(dbPool *sql.DB) {
-	dbPool.SetMaxIdleConns(5)
-	dbPool.SetMaxOpenConns(7)
-	dbPool.SetConnMaxLifetime(1800 * time.Second)
 }
