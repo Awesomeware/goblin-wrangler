@@ -19,3 +19,4 @@ You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/
 
 * Move `.env.development.example` to `.env.development` and fill in GOOGLE_CLIENT_ID with a valid OAuth2 client ID.
 * Move `.firebaserc.example` to `.firebaserc` and fill in project with a valid GCP project name corresponding to the project tied to Firebase Hosting.
+
