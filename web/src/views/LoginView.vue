@@ -1,109 +1,26 @@
 <template>
-  <div ref="googleSSO" />
-  <div style="margin-top: 25px; border-top: 1px solid #edeff1; width: 40%" />
-  OR...
-  <form @submit.prevent="onSubmit">
-    <div class="mb-3 row">
-      <label for="email" class="col-sm-4 col-form-label text-sm-end">
-        Email:
-      </label>
-      <div class="col-sm-8">
-        <input
-          type="text"
-          class="form-control"
-          v-model="credentials.email"
-          id="email"
-          :class="error.errors.email ? 'is-invalid' : ''"
-          :disabled="loading"
-        />
-        <div v-if="error.errors.email" class="invalid-feedback fw-bolder">
-          {{ error.errors.email.toString() }}
-        </div>
-      </div>
-    </div>
-
-    <div class="mb-3 row">
-      <label for="current-password" class="col-sm-4 col-form-label text-sm-end">
-        Password:
-      </label>
-      <div class="col-sm-8">
-        <input
-          type="password"
-          class="form-control"
-          v-model="credentials.password"
-          id="current-password"
-          :class="error.errors.password ? 'is-invalid' : ''"
-          :disabled="loading"
-          autocomplete="false"
-        />
-        <div v-if="error.errors.password" class="invalid-feedback fw-bolder">
-          {{ error.errors.password.toString() }}
-        </div>
-      </div>
-    </div>
-
-    <div class="mb-3 row">
-      <label class="col-sm-4"></label>
-      <div class="col-sm-8">
-        <button
-          type="submit"
-          :disabled="loading"
-          class="btn btn-outline-primary"
-        >
-          <div
-            v-if="loading"
-            class="spinner-border mx-3 spinner-border-sm"
-            role="status"
-          >
-            <span class="visually-hidden">Loading...</span>
-          </div>
-          <span v-else>Login</span>
-        </button>
-      </div>
-    </div>
-  </form>
-  
+  <div
+    id="g_id_onload"
+    :data-client_id="googleClientID"
+    :data-login_uri="googleLoginURI"
+  />
+  <div class="g_id_signin"
+    data-type="standard"
+    data-size="medium"
+    data-theme="outline"
+    data-text="continue_with"
+    data-shape="rectangular"
+  />
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeUnmount, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
+import { ref, onBeforeUnmount } from "vue";
 import { useErrorStore } from "@/stores/error";
 
-const credentials = ref({ email: "", password: "" });
-const loading = ref(false);
-const router = useRouter();
 const error = useErrorStore();
-const onSubmit = () => {
-  loading.value = !loading.value;
-  useAuthStore()
-    .login(credentials.value)
-    .then(() => router.push({ name: "index" }))
-    .catch(() => (loading.value = !loading.value));
-};
+
 onBeforeUnmount(() => error.$reset());
 
-const googleSSO = ref();
-
-const onCreds = (credentials: any) => {
-  useAuthStore()
-    .loginWithGoogle(credentials)
-    .then(() => router.push({ name: 'home' }))
-};
-
-onMounted(() => {
-  // @ts-ignore
-  google.accounts.id.initialize({
-    client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-    callback: onCreds
-  });
-
-  // @ts-ignore
-  google.accounts.id.renderButton(
-    googleSSO.value,
-    { theme: 'outline', size: 'large', text: 'continue_with' }
-  );
-});
-
+const googleClientID = ref(import.meta.env.VITE_GOOGLE_CLIENT_ID);
+const googleLoginURI = ref(import.meta.env.VITE_API_BASE_URL + "/" + import.meta.env.VITE_API_SSO_LOGIN_PATH);
 </script>

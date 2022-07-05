@@ -7,7 +7,7 @@ import (
 )
 
 type ChatService interface {
-	Save(models.ChatMessage) models.ChatMessage
+	New(models.ChatMessage) models.ChatMessage
 	FindAll() []models.ChatMessage
 }
 
@@ -22,7 +22,7 @@ func NewChatService(db *sql.DB) ChatService {
 	}
 }
 
-func (model *chatService) Save(msg models.ChatMessage) models.ChatMessage {
+func (model *chatService) New(msg models.ChatMessage) models.ChatMessage {
 	model.messages = append(model.messages, msg)
 
 	return msg

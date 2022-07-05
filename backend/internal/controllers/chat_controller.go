@@ -10,7 +10,7 @@ import (
 
 type ChatController interface {
 	FindAll(ctx *gin.Context)
-	Save(ctx *gin.Context)
+	New(ctx *gin.Context)
 }
 
 type chatController struct {
@@ -27,9 +27,9 @@ func (c *chatController) FindAll(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, c.service.FindAll())
 }
 
-func (c *chatController) Save(ctx *gin.Context) {
+func (c *chatController) New(ctx *gin.Context) {
 	var chatMsg models.ChatMessage
 	ctx.BindJSON(&chatMsg)
-	c.service.Save(chatMsg)
+	c.service.New(chatMsg)
 	ctx.JSON(http.StatusOK, chatMsg)
 }

@@ -39,7 +39,7 @@ func createRouter(app *app) (*gin.Engine, func()) {
 	chat := g.Group("/chat")
 	{
 		chat.GET("", app.ChatController.FindAll)
-		chat.POST("", app.ChatController.Save)
+		chat.POST("", app.ChatController.New)
 	}
 
 	g.POST("/login", app.AuthController.Login)
