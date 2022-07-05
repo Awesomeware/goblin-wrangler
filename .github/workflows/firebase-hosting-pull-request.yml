@@ -18,11 +18,12 @@ jobs:
       - name: Set env variables
         env:
           API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          API_SSO_LOGIN_PATH: ${{ secrets.API_SSO_LOGIN_PATH }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
         run: |
           echo VITE_API_BASE_URL="$API_BASE_URL" >> .env.development
+          echo VITE_API_SSO_LOGIN_PATH="$API_SSO_LOGIN_PATH" >> .env.development
           echo VITE_GOOGLE_CLIENT_ID="$GOOGLE_CLIENT_ID" >> .env.development
-          echo VITE_SSO_LOGIN_PATH="$SSO_LOGIN_PATH" >> .env.development
       - run: npm ci && npm run build:dev
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
