@@ -42,7 +42,7 @@ func createRouter(app *app) (*gin.Engine, func()) {
 		chat.POST("", app.ChatController.New)
 	}
 
-	g.POST("/sso", app.AuthController.ValidateGoogleSSOToken)
+	g.POST("/auth/google", app.AuthController.ValidateGoogleSSOToken)
 
 	return g, func() {}
 }
