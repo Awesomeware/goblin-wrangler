@@ -29,6 +29,7 @@ func getCorsConfig() cors.Config {
 	corsConfig.AllowCredentials = true
 	corsConfig.AllowHeaders = []string{"Origin", "Authorization", "Content-Type"}
 	corsConfig.AddAllowMethods("OPTIONS")
+	fmt.Printf("Frontend CORS origin: %s", viper.GetString("FRONTEND_CORS_ORIGIN"))
 	return corsConfig
 }
 
