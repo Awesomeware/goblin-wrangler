@@ -1,0 +1,21 @@
+name: Deploy to Netlify on Merge
+on:
+  push:
+    paths:
+    - 'web/**'
+    - '.github/workflows/web-**'
+    branches:
+      - main
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Publish
+        uses: netlify/actions/build@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_BASE: web
+          NETLIFY_CMD: npm ci && npm run build
+          NETLIFY_DIR: web/dist
