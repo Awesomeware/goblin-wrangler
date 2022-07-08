@@ -4,7 +4,6 @@ Welcome to Goblin Wrangler, a tabletop gaming service!
 ## Local development
 Prior to running Goblin Wrangler locally you must do some setup:
 
-1. `cp web/.firebaserc.example web/.firebaserc` and change the my-gcp-project text to point to the GCP project you've attached to Firebase Hosting.
 1. `cp web/.env.development.example web/.env.development` and set the GOOGLE_CLIENT_ID to a valid OAuth 2 Client ID you've generated in GCP.
 
 After that it is possible to deploy Goblin Wrangler locally using [Docker Compose](https://docs.docker.com/compose/). Our compose file will deploy the 
@@ -17,16 +16,15 @@ docker-compose up -d
 
 The website will then be available via [localhost](http://localhost:3000). Both the backend and web projects reload on code changes.
 
-## Project components
+## Remote deployment
 
-This project consists of a Go-based backend (found under `./backend`), and a Vite/Vue3 TypeScript frontend (found under `./web`).
+Goblin Wrangler currently makes use of the following:
+* DNS via CloudFlare.
+* OAuth credentials from Google GCP.
+* Netlify to build and publish the frontend project (`./web`), a Vite/Vue3 project.
+* Fly.io to build and publish the backend project (`./backend`), a Golang project.
+* Fly.io for the Postgres DB used by the backend.
 
-## Deployment
-
-Goblin Wrangler makes use of Google services to deploy:
-* Cloud Run for the backend, with a cloud run trigger to build new releases of backend/ on repository changes.
-* Firebase Hosting for frontend, using GitHub CI/CD to build new releases of web/ on repository changes.
-
-The infrastructure to support this is not currently codified, but the idea is to do so through e.g., [pulumi](https://www.pulumi.com/)
-or [terraform](https://www.terraform.io/) soon, in a way that would let you deploy remotely in the same way. But you could deploy
-the backend and frontend in any way you like (such as EKS, via Vercel, etc), without any real changes to the project parts.
+Netlify stores secrets related to the frontend, and Fly.io secrets related to the backend. The secrets are not currently codified
+or stored in a secrets manager of any kind, and the infrastructure and setup on Netlify and Fly are not codified beyond the relevant
+deployment TOML files in each project.
