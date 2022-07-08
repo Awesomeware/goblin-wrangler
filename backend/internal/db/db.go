@@ -18,11 +18,25 @@ func mustGetenv(k string) string {
 }
 
 func New() (*pgxpool.Pool, error) {
-	if viper.GetString("DB_SOCKET_DIR") != "" {
+	if viper.GetString("DATABASE_URL") != "" {
+		return initDbUrl()
+	} else if viper.GetString("DB_SOCKET_DIR") != "" {
 		return initSocketConnectionPool()
 	} else {
 		return initTCPConnectionPool()
 	}
+}
+
+func initDbUrl() (*pgxpool.Pool, error) {
+	dbURI := mustGetenv("DATABASE_URL")
+
+	dbPool, err := pgxpool.Connect(context.Background(), dbURI)
+
+	if err != nil {
+		return nil, fmt.Errorf("pgxpool.Connect: %v", err)
+	}
+
+	return dbPool, nil
 }
 
 // initSocketConnectionPool initializes a Unix socket connection pool
