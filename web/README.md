@@ -18,6 +18,12 @@ You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/
 ## Setup for running locally
 
 * Move `.env.development.example` to `.env.development` and fill in GOOGLE_CLIENT_ID with a valid OAuth2 client ID.
-* Move `.firebaserc.example` to `.firebaserc` and fill in project with a valid GCP project name corresponding to the project tied to Firebase Hosting.
 
+## Setup for deploying remotely
 
+The project is currently intended to be deployed to Netlify. In Netlify we expect the same environment variables to be
+set as the ones present in `./env.development`, namely:
+
+* VITE_API_BASE_URL: the URL location of the backend API e.g., https://api.mywebsite.com
+* VITE_API_SSO_LOGIN_PATH: the path to append at the end of the API where we expect the Google SSO Authentication endpoint to live e.g., auth/google
+* VITE_GOOGLE_CLIENT_ID: the Google Client ID for SSO-based OAuth flow.

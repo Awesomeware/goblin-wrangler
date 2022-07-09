@@ -7,4 +7,8 @@ really be bothered to deploy a ton of services and thus need to dip into k8s str
 away. So for now the whole backend is contained in 'backend' and 'web' for a backend
 service and web SPA respectively.
 
-Built by Google Cloud Build as an image to be run by Cloud Run. Yerp.
+Currently build into Fly.io. The following secrets need to exist:
+
+* VPR_DATABASE_URL: a valid postgres:// database URL.
+* VPR_FRONTEND_CORS_ORIGIN: a CORS origin to set for the web server.
+* VPR_GOOGLE_CLIENT_ID: a valid Google client ID for SSO-based OAuth flow.
