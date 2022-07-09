@@ -1,6 +1,6 @@
 [build]
   base = "web/"
-  publish = "web/dist"
+  publish = "dist"
   command = "npm ci && npn run build"
 
 [[redirects]]
