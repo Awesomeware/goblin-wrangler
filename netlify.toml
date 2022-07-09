@@ -1,2 +1,9 @@
 [build]
   base = "web/"
+  publish = "web/dist"
+  command = "npm ci && npn run build"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
