@@ -28,7 +28,7 @@
     "@types/webfontloader": "^1.6.34",
     "@vitejs/plugin-vue": "^2.3.3",
     "typescript": "^4.5.4",
-    "vite": "^2.9.9",
+    "vite": "^2.9.13",
     "vite-plugin-vuetify": "^1.0.0-alpha.0",
     "vue-tsc": "^0.34.7"
   }
